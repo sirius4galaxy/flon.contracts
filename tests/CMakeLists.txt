@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(EOSIO_VERSION_MIN "3.1")
-set(EOSIO_VERSION_SOFT_MAX "3.1")
+set(EOSIO_VERSION_MIN "0.4")
+set(EOSIO_VERSION_SOFT_MAX "1.0")
 # set(EOSIO_VERSION_HARD_MAX "")
 
 find_package(leap)
