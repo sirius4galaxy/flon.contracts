@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(eosio_contracts)
+project(fullon_contracts)
 
-set(VERSION_MAJOR 3)
-set(VERSION_MINOR 1)
-set(VERSION_PATCH 1)
-#set(VERSION_SUFFIX rc2)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 4)
+set(VERSION_PATCH 0)
+set(VERSION_SUFFIX alpha1)
 
 if(VERSION_SUFFIX)
   set(VERSION_FULL "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}-${VERSION_SUFFIX}")
@@ -13,7 +13,7 @@ else()
   set(VERSION_FULL "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 endif()
 
-message(STATUS "Building eosio.contracts v${VERSION_FULL}")
+message(STATUS "Building fullon.contracts v${VERSION_FULL}")
 
 include(ExternalProject)
 
