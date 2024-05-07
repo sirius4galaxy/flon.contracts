@@ -62,13 +62,17 @@ namespace eosiosystem {
          return ( flags & ~static_cast<F>(field) );
    }
 
+   static constexpr uint32_t calc_blocks_by_sec(uint32_t sec) {
+      return sec * block_timestamp::block_interval_ms / 1000;
+   }
+
    static constexpr uint32_t seconds_per_year      = 52 * 7 * 24 * 3600;
    static constexpr uint32_t seconds_per_day       = 24 * 3600;
    static constexpr uint32_t seconds_per_hour      = 3600;
    static constexpr int64_t  useconds_per_year     = int64_t(seconds_per_year) * 1000'000ll;
    static constexpr int64_t  useconds_per_day      = int64_t(seconds_per_day) * 1000'000ll;
    static constexpr int64_t  useconds_per_hour     = int64_t(seconds_per_hour) * 1000'000ll;
-   static constexpr uint32_t blocks_per_day        = 2 * seconds_per_day; // half seconds per day
+   static constexpr uint32_t blocks_per_day        = calc_blocks_by_sec(seconds_per_day);
 
    static constexpr int64_t  min_activated_stake   = 150'000'000'0000;
    static constexpr int64_t  ram_gift_bytes        = 1400;
@@ -95,9 +99,9 @@ namespace eosiosystem {
 
   /**
    * The `eosio.system` smart contract is provided by `block.one` as a sample system contract, and it defines the structures and actions needed for blockchain's core functionality.
-   * 
+   *
    * Just like in the `eosio.bios` sample contract implementation, there are a few actions which are not implemented at the contract level (`newaccount`, `updateauth`, `deleteauth`, `linkauth`, `unlinkauth`, `canceldelay`, `onerror`, `setabi`, `setcode`), they are just declared in the contract so they will show in the contract's ABI and users will be able to push those actions to the chain via the account holding the `eosio.system` contract, but the implementation is at the EOSIO core level. They are referred to as EOSIO native actions.
-   * 
+   *
    * - Users can stake tokens for CPU and Network bandwidth, and then vote for producers or
    *    delegate their vote to a proxy.
    * - Producers register in order to be voted for, and can claim per-block and per-vote rewards.
@@ -106,7 +110,7 @@ namespace eosiosystem {
    * - A resource exchange system (REX) allows token holders to lend their tokens,
    *    and users to rent CPU and Network resources in return for a market-determined fee.
    */
-  
+
    // A name bid, which consists of:
    // - a `newname` name that the bid is for
    // - a `high_bidder` account name that is the one with the highest bid so far
@@ -700,17 +704,17 @@ namespace eosiosystem {
 
       public:
          static constexpr eosio::name active_permission{"active"_n};
-         static constexpr eosio::name token_account{"gax.token"_n};
-         static constexpr eosio::name ram_account{"gax.ram"_n};
-         static constexpr eosio::name ramfee_account{"gax.ramfee"_n};
-         static constexpr eosio::name stake_account{"gax.stake"_n};
-         static constexpr eosio::name bpay_account{"gax.bpay"_n};
-         static constexpr eosio::name vpay_account{"gax.vpay"_n};
-         static constexpr eosio::name names_account{"gax.names"_n};
-         static constexpr eosio::name saving_account{"gax.saving"_n};
-         static constexpr eosio::name rex_account{"gax.rex"_n};
-         static constexpr eosio::name reserve_account{"gax.reserv"_n}; // cspell:disable-line
-         static constexpr eosio::name null_account{"gax.null"_n};
+         static constexpr eosio::name token_account{"flon.token"_n};
+         static constexpr eosio::name ram_account{"flon.ram"_n};
+         static constexpr eosio::name ramfee_account{"flon.ramfee"_n};
+         static constexpr eosio::name stake_account{"flon.stake"_n};
+         static constexpr eosio::name bpay_account{"flon.bpay"_n};
+         static constexpr eosio::name vpay_account{"flon.vpay"_n};
+         static constexpr eosio::name names_account{"flon.names"_n};
+         static constexpr eosio::name saving_account{"flon.saving"_n};
+         static constexpr eosio::name rex_account{"flon.rex"_n};
+         static constexpr eosio::name reserve_account{"flon.reserv"_n}; // cspell:disable-line
+         static constexpr eosio::name null_account{"flon.null"_n};
          static constexpr symbol ramcore_symbol = symbol(symbol_code("RAMCORE"), 4);
          static constexpr symbol ram_symbol     = symbol(symbol_code("RAM"), 0);
          static constexpr symbol rex_symbol     = symbol(symbol_code("REX"), 4);
@@ -720,7 +724,7 @@ namespace eosiosystem {
 
           // Returns the core symbol by system account name
           // @param system_account - the system account to get the core symbol for.
-         static symbol get_core_symbol( name system_account = "gax"_n ) {
+         static symbol get_core_symbol( name system_account = "flon"_n ) {
             rammarket rm(system_account, system_account.value);
             const static auto sym = get_core_symbol( rm );
             return sym;
@@ -1217,10 +1221,10 @@ namespace eosiosystem {
 
          /**
           * Update the vote weight for the producers or proxy `voter_name` currently votes for. This will also
-          * update the `staked` value for the `voter_name` by checking `rexbal` and all delegated NET and CPU. 
-          * 
+          * update the `staked` value for the `voter_name` by checking `rexbal` and all delegated NET and CPU.
+          *
           * @param voter_name - the account to update the votes for,
-          * 
+          *
           * @post the voter.staked will be updated
           * @post previously voted for producers vote weight will be updated with new weight
           * @post previously voted for proxy vote weight will be updated with new weight
@@ -1389,6 +1393,9 @@ namespace eosiosystem {
          [[eosio::action]]
          void limitauthchg( const name& account, const std::vector<name>& allow_perms, const std::vector<name>& disallow_perms );
 
+         [[eosio::action]]
+         void regshard( const eosio::name& name, const eosio::name& owner, bool enabled );
+
          using init_action = eosio::action_wrapper<"init"_n, &system_contract::init>;
          using setacctram_action = eosio::action_wrapper<"setacctram"_n, &system_contract::setacctram>;
          using setacctnet_action = eosio::action_wrapper<"setacctnet"_n, &system_contract::setacctnet>;
@@ -1439,6 +1446,7 @@ namespace eosiosystem {
          using cfgpowerup_action = eosio::action_wrapper<"cfgpowerup"_n, &system_contract::cfgpowerup>;
          using powerupexec_action = eosio::action_wrapper<"powerupexec"_n, &system_contract::powerupexec>;
          using powerup_action = eosio::action_wrapper<"powerup"_n, &system_contract::powerup>;
+         using regshard_action = eosio::action_wrapper<"regshard"_n, &system_contract::regshard>;
 
       private:
          // Implementation details:

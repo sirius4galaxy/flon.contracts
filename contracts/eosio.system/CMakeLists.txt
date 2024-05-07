@@ -11,7 +11,8 @@ add_contract(
   ${CMAKE_CURRENT_SOURCE_DIR}/src/rex.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/voting.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/limit_auth_changes.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/block_info.cpp)
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/block_info.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/shard.cpp)
 
 if(SYSTEM_CONFIGURABLE_WASM_LIMITS)
   target_compile_definitions(eosio.system PUBLIC SYSTEM_CONFIGURABLE_WASM_LIMITS)
