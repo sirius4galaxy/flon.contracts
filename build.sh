@@ -67,7 +67,7 @@ else
     echo "Cannot proceed. Exiting..."
     exit 1;
   fi
-  
+
   echo "Using CDT installation/build at: $CDT_INSTALL_DIR"
   echo ""
   CDT_DIR_CMAKE_OPTION="-Dcdt_DIR=${CDT_INSTALL_DIR}/lib/cmake/cdt"
@@ -77,8 +77,9 @@ printf "\t=========== Building eos-system-contracts ===========\n\n"
 RED='\033[0;31m'
 NC='\033[0m'
 CPU_CORES=$(getconf _NPROCESSORS_ONLN)
+
 mkdir -p build
 pushd build &> /dev/null
-cmake -DBUILD_TESTS=${BUILD_TESTS} ${LEAP_DIR_CMAKE_OPTION} ${CDT_DIR_CMAKE_OPTION} ../
+cmake -DBUILD_TESTS=${BUILD_TESTS} ${LEAP_DIR_CMAKE_OPTION} ${CDT_DIR_CMAKE_OPTION} ${CMAKE_OPTIONS} ../
 make -j $CPU_CORES
 popd &> /dev/null

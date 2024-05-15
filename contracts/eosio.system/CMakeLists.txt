@@ -43,3 +43,27 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ricardian/eosio.system.contracts.md.i
 
 target_compile_options(eosio.system PUBLIC -R${CMAKE_CURRENT_SOURCE_DIR}/ricardian
                                            -R${CMAKE_CURRENT_BINARY_DIR}/ricardian)
+
+install(
+  FILES
+     ${CMAKE_CURRENT_BINARY_DIR}/eosio.system.wasm
+     ${CMAKE_CURRENT_BINARY_DIR}/eosio.system.abi
+  DESTINATION
+     ${CMAKE_INSTALL_PREFIX}/contracts/eosio.system
+)
+
+install(
+  FILES
+     ${CMAKE_CURRENT_BINARY_DIR}/.rex/rex.results.wasm
+     ${CMAKE_CURRENT_BINARY_DIR}/.rex/rex.results.abi
+  DESTINATION
+     ${CMAKE_INSTALL_PREFIX}/contracts/rex.results
+)
+
+install(
+  FILES
+     ${CMAKE_CURRENT_BINARY_DIR}/.powerup/powup.results.wasm
+     ${CMAKE_CURRENT_BINARY_DIR}/.powerup/powup.results.abi
+  DESTINATION
+     ${CMAKE_INSTALL_PREFIX}/contracts/powup.results
+)

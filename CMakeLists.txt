@@ -25,19 +25,31 @@ option(SYSTEM_CONFIGURABLE_WASM_LIMITS
 option(SYSTEM_BLOCKCHAIN_PARAMETERS
        "Enables use of the host functions activated by the BLOCKCHAIN_PARAMETERS protocol feature" ON)
 
+
 ExternalProject_Add(
-  contracts_project
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/contracts
-  BINARY_DIR ${CMAKE_BINARY_DIR}/contracts
-  CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
-             -DCMAKE_TOOLCHAIN_FILE=${CDT_ROOT}/lib/cmake/cdt/CDTWasmToolchain.cmake
-             -DSYSTEM_CONFIGURABLE_WASM_LIMITS=${SYSTEM_CONFIGURABLE_WASM_LIMITS}
-             -DSYSTEM_BLOCKCHAIN_PARAMETERS=${SYSTEM_BLOCKCHAIN_PARAMETERS}
-  UPDATE_COMMAND ""
-  PATCH_COMMAND ""
-  TEST_COMMAND ""
-  INSTALL_COMMAND ""
-  BUILD_ALWAYS 1)
+   amax_contracts_project
+   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contracts
+   BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/contracts
+   INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/install
+   CMAKE_ARGS
+              -DCMAKE_BUILD_TYPE=Release
+              -DCMAKE_TOOLCHAIN_FILE=${CDT_ROOT}/lib/cmake/cdt/CDTWasmToolchain.cmake
+              -DSYSTEM_CONFIGURABLE_WASM_LIMITS=${SYSTEM_CONFIGURABLE_WASM_LIMITS}
+              -DSYSTEM_BLOCKCHAIN_PARAMETERS=${SYSTEM_BLOCKCHAIN_PARAMETERS}
+              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  #  DEPENDS update_version
+   UPDATE_COMMAND ""
+   PATCH_COMMAND ""
+   TEST_COMMAND ""
+   BUILD_ALWAYS 1
+)
+
+# Actually install subproject.
+install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/install/
+    DESTINATION "${CMAKE_INSTALL_PREFIX}"
+    USE_SOURCE_PERMISSIONS # Remain permissions (rwx) for installed files
+)
 
 if(APPLE)
   set(OPENSSL_ROOT "/usr/local/opt/openssl")
