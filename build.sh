@@ -78,6 +78,10 @@ RED='\033[0;31m'
 NC='\033[0m'
 CPU_CORES=$(getconf _NPROCESSORS_ONLN)
 
+if [[ ${BUILD_TESTS} == ON ]] && [[ -f "${LEAP_BUILD_DIR}/pinned_build/pinned_toolchain.cmake" ]]; then
+  CMAKE_OPTIONS="${CMAKE_OPTIONS} -DCMAKE_TOOLCHAIN_FILE=${LEAP_BUILD_DIR}/pinned_build/pinned_toolchain.cmake"
+fi
+
 mkdir -p build
 pushd build &> /dev/null
 cmake -DBUILD_TESTS=${BUILD_TESTS} ${LEAP_DIR_CMAKE_OPTION} ${CDT_DIR_CMAKE_OPTION} ${CMAKE_OPTIONS} ../
