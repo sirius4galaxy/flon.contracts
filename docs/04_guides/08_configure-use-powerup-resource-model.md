@@ -23,7 +23,7 @@ to profit off the new market.
 void cfgpowerup( powerup_config& args );
 
 struct powerup_config_resource {
-    std::optional<int64_t>        current_weight_ratio;   // Immediately set weight_ratio to this amount. 1x = 10^15. 0.01x = 10^13.                                                
+    std::optional<int64_t>        current_weight_ratio;   // Immediately set weight_ratio to this amount. 1x = 10^15. 0.01x = 10^13.
                                                           //    Do not specify to preserve the existing setting or use the default;
                                                           //    this avoids sudden price jumps. For new chains which don't need
                                                           //    to gradually phase out staking and REX, 0.01x (10^13) is a good
@@ -124,9 +124,9 @@ struct powerup_state {
 
 ### Preparation for Upgrade
 1. Build [eosio.contracts](https://github.com/EOSIO/eosio.contracts) with `powerup` code. Version **1.9.x** or greater .
-2. Deploy eosio.system contract to `eosio`.
-3. Create account `eosio.reserv` and ensure the account has enough RAM, at least 4 KiB.
-4. Deploy `powup.results.abi` to `eosio.reserv` account using `setabi`. The ABI can be found in the `build/contracts/eosio.system/.powerup/` directory.
+2. Deploy flon.system contract to `flon`.
+3. Create account `flon.reserv` and ensure the account has enough RAM, at least 4 KiB.
+4. Deploy `powup.results.abi` to `flon.reserv` account using `setabi`. The ABI can be found in the `build/contracts/flon.system/.powerup/` directory.
 5. Enable the REX system (if not enabled).
 
 ### Configuring PowerUp
@@ -232,7 +232,7 @@ executed transaction: 82b7124601612b371b812e3bf65cf63bb44616802d3cd33a2c0422b583
 #          user <= eosio.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
 #     eosio.rex <= eosio.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
 ```
-You can see how much NET and CPU weight was received as well as the fee by looking at the `eosio.reserv::powupresult` informational action. 
+You can see how much NET and CPU weight was received as well as the fee by looking at the `flon.reserv::powupresult` informational action.
 
 *It is worth mentioning that the network being used for the example has not fully transitioned so the available resources are minimal therefore 1% of the resources are quite expensive. As the system continues the transition more resources are available to the `PowerUp` resource model and will become more affordable.*
 

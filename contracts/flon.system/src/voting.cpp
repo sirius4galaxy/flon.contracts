@@ -7,7 +7,7 @@
 #include <eosio/serialize.hpp>
 #include <eosio/singleton.hpp>
 
-#include <eosio.system/eosio.system.hpp>
+#include <flon.system/flon.system.hpp>
 #include <eosio.token/eosio.token.hpp>
 
 #include <type_traits>
@@ -219,9 +219,9 @@ namespace eosiosystem {
       check( voter != _voters.end(), "no voter found" );
 
       int64_t new_staked = 0;
-      
+
       updaterex(voter_name);
-      
+
       // get rex bal
       auto rex_itr = _rexbalance.find( voter_name.value );
       if( rex_itr != _rexbalance.end() && rex_itr->rex_balance.amount > 0 ) {
@@ -241,7 +241,7 @@ namespace eosiosystem {
             av.staked = new_staked;
          });
       }
-      
+
       update_votes(voter_name, voter->proxy, voter->producers, true);
    } // voteupdate
 

@@ -1,7 +1,7 @@
 add_contract(
-  eosio.system
-  eosio.system
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/eosio.system.cpp
+  flon.system
+  flon.system
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/flon.system.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/delegate_bandwidth.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/exchange_state.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/name_bidding.cpp
@@ -15,17 +15,17 @@ add_contract(
   ${CMAKE_CURRENT_SOURCE_DIR}/src/shard.cpp)
 
 if(SYSTEM_CONFIGURABLE_WASM_LIMITS)
-  target_compile_definitions(eosio.system PUBLIC SYSTEM_CONFIGURABLE_WASM_LIMITS)
+  target_compile_definitions(flon.system PUBLIC SYSTEM_CONFIGURABLE_WASM_LIMITS)
 endif()
 
 if(SYSTEM_BLOCKCHAIN_PARAMETERS)
-  target_compile_definitions(eosio.system PUBLIC SYSTEM_BLOCKCHAIN_PARAMETERS)
+  target_compile_definitions(flon.system PUBLIC SYSTEM_BLOCKCHAIN_PARAMETERS)
 endif()
 
-target_include_directories(eosio.system PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(flon.system PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
                                                ${CMAKE_CURRENT_SOURCE_DIR}/../eosio.token/include)
 
-set_target_properties(eosio.system PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+set_target_properties(flon.system PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_contract(rex.results rex.results ${CMAKE_CURRENT_SOURCE_DIR}/src/rex.results.cpp)
 add_contract(powup.results powup.results ${CMAKE_CURRENT_SOURCE_DIR}/src/powerup.results.cpp)
@@ -38,18 +38,18 @@ set_target_properties(rex.results PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_C
 
 set_target_properties(powup.results PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/.powerup")
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ricardian/eosio.system.contracts.md.in
-               ${CMAKE_CURRENT_BINARY_DIR}/ricardian/eosio.system.contracts.md @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ricardian/flon.system.contracts.md.in
+               ${CMAKE_CURRENT_BINARY_DIR}/ricardian/flon.system.contracts.md @ONLY)
 
-target_compile_options(eosio.system PUBLIC -R${CMAKE_CURRENT_SOURCE_DIR}/ricardian
+target_compile_options(flon.system PUBLIC -R${CMAKE_CURRENT_SOURCE_DIR}/ricardian
                                            -R${CMAKE_CURRENT_BINARY_DIR}/ricardian)
 
 install(
   FILES
-     ${CMAKE_CURRENT_BINARY_DIR}/eosio.system.wasm
-     ${CMAKE_CURRENT_BINARY_DIR}/eosio.system.abi
+     ${CMAKE_CURRENT_BINARY_DIR}/flon.system.wasm
+     ${CMAKE_CURRENT_BINARY_DIR}/flon.system.abi
   DESTINATION
-     ${CMAKE_INSTALL_PREFIX}/contracts/eosio.system
+     ${CMAKE_INSTALL_PREFIX}/contracts/flon.system
 )
 
 install(

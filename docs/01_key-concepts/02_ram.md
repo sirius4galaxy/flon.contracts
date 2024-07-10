@@ -13,7 +13,7 @@ RAM is the memory, the storage space, where the blockchain stores data. If your 
 
 - Multi-index table [how to documentation page](https://developers.eos.io/manuals/eosio.cdt/latest/how-to-guides/multi-index)
 
-- Singleton [reference documentation page](https://developers.eos.io/manuals/eosio.cdt/latest/group__singleton/#singleton-table) 
+- Singleton [reference documentation page](https://developers.eos.io/manuals/eosio.cdt/latest/group__singleton/#singleton-table)
 
 - Singleton [how to documentation page](https://developers.eos.io/manuals/eosio.cdt/latest/how-to-guides/multi-index/how-to-define-a-singleton)
 
@@ -34,6 +34,6 @@ RAM is a very important system resource because of the following reasons:
   - A portion of the occupied RAM is freed by the smart contract.
   - More RAM is allocated to the smart contract account through the RAM buying process.
 
-RAM is a scarce resource priced according to the unique Bancor liquidity algorithm which is implemented in the system contract [here](https://github.com/EOSIO/eos/blob/905e7c85714aee4286fa180ce946f15ceb4ce73c/contracts/eosio.system/exchange_state.hpp).
+RAM is a scarce resource priced according to the unique Bancor liquidity algorithm which is implemented in the system contract [here](https://github.com/fullon-labs/flon.contracts/tree/main/contracts/flon.system/exchange_state.hpp).
 
 The RAM system resource must be purchased using the system token. Refer to the [cleos manual](https://developers.eos.io/manuals/eos/v2.0/cleos/how-to-guides/how-to-buy-ram) to learn how to buy RAM via the command line interface.

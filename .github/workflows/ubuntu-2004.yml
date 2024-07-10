@@ -34,10 +34,10 @@ jobs:
             build/contracts/eosio.bios/eosio.bios.wasm \
             build/contracts/eosio.msig/eosio.msig.abi \
             build/contracts/eosio.msig/eosio.msig.wasm \
-            build/contracts/eosio.system/.powerup/powup.results.abi \
-            build/contracts/eosio.system/.rex/rex.results.abi \
-            build/contracts/eosio.system/eosio.system.abi \
-            build/contracts/eosio.system/eosio.system.wasm \
+            build/contracts/flon.system/.powerup/powup.results.abi \
+            build/contracts/flon.system/.rex/rex.results.abi \
+            build/contracts/flon.system/flon.system.abi \
+            build/contracts/flon.system/flon.system.wasm \
             build/contracts/eosio.token/eosio.token.abi \
             build/contracts/eosio.token/eosio.token.wasm \
             build/contracts/eosio.wrap/eosio.wrap.abi \

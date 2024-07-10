@@ -14,7 +14,7 @@
           "contracts/eosio.token/include/eosio.token/",
           "contracts/eosio.wrap/include/eosio.wrap/",
           "contracts/eosio.bios/include/eosio.bios/",
-          "contracts/eosio.system/include/eosio.system/",
+          "contracts/flon.system/include/flon.system/",
           "contracts/eosio.msig/include/eosio.msig/"
         ],
         "output_dir": "action-reference"

@@ -10,7 +10,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "eosio.system_tester.hpp"
+#include "flon.system_tester.hpp"
 
 using namespace eosio_system;
 
