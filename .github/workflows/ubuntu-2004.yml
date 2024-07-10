@@ -38,8 +38,8 @@ jobs:
             build/contracts/flon.system/.rex/rex.results.abi \
             build/contracts/flon.system/flon.system.abi \
             build/contracts/flon.system/flon.system.wasm \
-            build/contracts/eosio.token/eosio.token.abi \
-            build/contracts/eosio.token/eosio.token.wasm \
+            build/contracts/flon.token/flon.token.abi \
+            build/contracts/flon.token/flon.token.wasm \
             build/contracts/eosio.wrap/eosio.wrap.abi \
             build/contracts/eosio.wrap/eosio.wrap.wasm \
             built-contracts

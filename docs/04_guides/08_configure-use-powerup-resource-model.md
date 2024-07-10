@@ -227,10 +227,10 @@ cleos push action eosio powerup '[user, user, 1, 10000000000000, 10000000000000,
 ```
 executed transaction: 82b7124601612b371b812e3bf65cf63bb44616802d3cd33a2c0422b58399f54f  144 bytes  521 us
 #         eosio <= eosio::powerup               {"payer":"user","receiver":"user","days":1,"net_frac":"10000000000000","cpu_frac":"10000000000000","...
-#   eosio.token <= eosio.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
+#   flon.token <= flon.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
 #  eosio.reserv <= eosio.reserv::powupresult    {"fee":"999.9901 TST","powup_net_weight":"16354","powup_cpu_weight":"65416"}
-#          user <= eosio.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
-#     eosio.rex <= eosio.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
+#          user <= flon.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
+#     eosio.rex <= flon.token::transfer        {"from":"user","to":"eosio.rex","quantity":"999.9901 TST","memo":"transfer from user to eosio.rex"}
 ```
 You can see how much NET and CPU weight was received as well as the fee by looking at the `flon.reserv::powupresult` informational action.
 

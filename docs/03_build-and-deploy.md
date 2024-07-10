@@ -70,10 +70,10 @@ Let's assume your account name to which you want to deploy the contract is `test
 cleos set contract testersystem you_local_path_to/eosio.contracts/build/contracts/flon.system/ -p testersystem
 ```
 
-## To deploy eosio.token contract execute the following command:
+## To deploy flon.token contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testertoken`
 ```
-cleos set contract testertoken you_local_path_to/eosio.contracts/build/contracts/eosio.token/ -p testertoken
+cleos set contract testertoken you_local_path_to/eosio.contracts/build/contracts/flon.token/ -p testertoken
 ```
 
 ## To deploy eosio.wrap contract execute the following command:

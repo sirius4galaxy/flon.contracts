@@ -47,7 +47,7 @@ add_subdirectory(eosio.bios)
 add_subdirectory(eosio.boot)
 add_subdirectory(eosio.msig)
 add_subdirectory(flon.system)
-add_subdirectory(eosio.token)
+add_subdirectory(flon.token)
 add_subdirectory(eosio.wrap)
 
 add_subdirectory(test_contracts)
