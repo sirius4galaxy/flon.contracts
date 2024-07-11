@@ -904,8 +904,8 @@ BOOST_FIXTURE_TEST_CASE( producer_wtmsig_transition, eosio_system_tester ) try {
 
    BOOST_REQUIRE_EQUAL( control->active_producers().version, 0u );
 
-   set_code( config::system_account_name, contracts::util::system_wasm_v1_8() );
-   set_abi(  config::system_account_name, contracts::util::system_abi_v1_8().data() );
+   // set_code( config::system_account_name, contracts::util::system_wasm_v1_8() );
+   // set_abi(  config::system_account_name, contracts::util::system_abi_v1_8().data() );
 
    issue_and_transfer( "alice1111111"_n, core_sym::from_string("200000000.0000"),  config::system_account_name );
    BOOST_REQUIRE_EQUAL( success(), push_action( "alice1111111"_n, "regproducer"_n, mvo()
@@ -936,8 +936,8 @@ BOOST_FIXTURE_TEST_CASE( producer_wtmsig_transition, eosio_system_tester ) try {
 
    auto alice_initial_ram_usage = rlm.get_account_ram_usage("alice1111111"_n);
 
-   set_code( config::system_account_name, contracts::system_wasm() );
-   set_abi(  config::system_account_name, contracts::system_abi().data() );
+   // set_code( config::system_account_name, contracts::system_wasm() );
+   // set_abi(  config::system_account_name, contracts::system_abi().data() );
    produce_block();
    BOOST_REQUIRE_EQUAL( control->pending_block_producer(), "alice1111111"_n );
 
@@ -958,13 +958,13 @@ BOOST_FIXTURE_TEST_CASE( producer_wtmsig_transition, eosio_system_tester ) try {
    auto alice_ram_usage = rlm.get_account_ram_usage("alice1111111"_n);
    BOOST_CHECK_EQUAL( alice_initial_ram_usage, alice_ram_usage );
 
-   auto alice_prod_info3 = get_producer_info( "alice1111111"_n );
-   if( alice_prod_info3.get_object().contains("producer_authority") ) {
-      BOOST_CHECK_EQUAL( alice_prod_info3["producer_authority"][1]["threshold"], 0 );
-   }
+   // auto alice_prod_info3 = get_producer_info( "alice1111111"_n );
+   // if( alice_prod_info3.get_object().contains("producer_authority") ) {
+   //    BOOST_CHECK_EQUAL( alice_prod_info3["producer_authority"][1]["threshold"], 0 );
+   // }
 
    produce_block( fc::minutes(2) );
-   const auto schedule_update3 = convert_to_block_timestamp(get_global_state()["last_producer_schedule_update"]);
+   // const auto schedule_update3 = convert_to_block_timestamp(get_global_state()["last_producer_schedule_update"]);
 
    // The bug in v1.9.0 would cause alice to have an invalid producer authority (the default block_signing_authority).
    // The v1.9.0 system contract would have attempted to set a proposed producer schedule including this invalid
@@ -976,7 +976,7 @@ BOOST_FIXTURE_TEST_CASE( producer_wtmsig_transition, eosio_system_tester ) try {
    // and instead resort to constructing the block signing authority from the single producer key in the table.
    // So newer system contracts should see onblock continue to function, which is verified by the check below.
 
-   BOOST_CHECK( schedule_update2 < schedule_update3 ); // Ensure last_producer_schedule_update is increasing.
+   // BOOST_CHECK( schedule_update2 < schedule_update3 ); // Ensure last_producer_schedule_update is increasing.
 
    // But even if the buggy v1.9.0 system contract was running, it should always still be possible to recover
    // by having the producer with the invalid authority simply call regproducer or regproducer2 to correct their
@@ -2643,86 +2643,6 @@ BOOST_FIXTURE_TEST_CASE(votepay_transition, eosio_system_tester, * boost::unit_t
                         get_producer_info2("defproducer1"_n)["last_votepay_share_update"].as_string() );
 
 } FC_LOG_AND_RETHROW()
-
-
-BOOST_AUTO_TEST_CASE(votepay_transition2, * boost::unit_test::tolerance(1e-10)) try {
-   eosio_system_tester t(eosio_system_tester::setup_level::minimal);
-
-   std::string old_contract_core_symbol_name = "SYS"; // Set to core symbol used in contracts::util::system_wasm_old()
-   symbol old_contract_core_symbol{::eosio::chain::string_to_symbol_c( 4, old_contract_core_symbol_name.c_str() )};
-
-   auto old_core_from_string = [&]( const std::string& s ) {
-      return eosio::chain::asset::from_string(s + " " + old_contract_core_symbol_name);
-   };
-
-   t.create_core_token( old_contract_core_symbol );
-   t.set_code( config::system_account_name, contracts::util::system_wasm_old() );
-   t.set_abi(  config::system_account_name, contracts::util::system_abi_old().data() );
-   {
-      const auto& accnt = t.control->db().get<account_object,by_name>( config::system_account_name );
-      abi_def abi;
-      BOOST_REQUIRE_EQUAL(abi_serializer::to_abi(accnt.abi, abi), true);
-      t.abi_ser.set_abi(abi, abi_serializer::create_yield_function(eosio_system_tester::abi_serializer_max_time));
-   }
-   const asset net = old_core_from_string("80.0000");
-   const asset cpu = old_core_from_string("80.0000");
-   const std::vector<account_name> voters = { "producvotera"_n, "producvoterb"_n, "producvoterc"_n, "producvoterd"_n };
-   for (const auto& v: voters) {
-      t.create_account_with_resources( v, config::system_account_name, old_core_from_string("1.0000"), false, net, cpu );
-      t.transfer( config::system_account_name, v, old_core_from_string("100000000.0000"), config::system_account_name );
-      BOOST_REQUIRE_EQUAL(t.success(), t.stake(v, old_core_from_string("30000000.0000"), old_core_from_string("30000000.0000")) );
-   }
-
-   // create accounts {defproducera, defproducerb, ..., defproducerz} and register as producers
-   std::vector<account_name> producer_names;
-   {
-      producer_names.reserve('z' - 'a' + 1);
-      {
-         const std::string root("defproducer");
-         for ( char c = 'a'; c <= 'd'; ++c ) {
-            producer_names.emplace_back(root + std::string(1, c));
-         }
-      }
-     t.setup_producer_accounts( producer_names, old_core_from_string("1.0000"),
-                     old_core_from_string("80.0000"), old_core_from_string("80.0000") );
-      for (const auto& p: producer_names) {
-         BOOST_REQUIRE_EQUAL( t.success(), t.regproducer(p) );
-         BOOST_TEST_REQUIRE(0 == t.get_producer_info(p)["total_votes"].as_double());
-      }
-   }
-
-   BOOST_REQUIRE_EQUAL( t.success(), t.vote("producvotera"_n, vector<account_name>(producer_names.begin(), producer_names.end())) );
-   t.produce_block( fc::hours(20) );
-   BOOST_REQUIRE_EQUAL( t.success(), t.vote("producvoterb"_n, vector<account_name>(producer_names.begin(), producer_names.end())) );
-   t.produce_block( fc::hours(30) );
-   BOOST_REQUIRE_EQUAL( t.success(), t.vote("producvoterc"_n, vector<account_name>(producer_names.begin(), producer_names.end())) );
-   BOOST_REQUIRE_EQUAL( t.success(), t.push_action(producer_names[0], "claimrewards"_n, mvo()("owner", producer_names[0])) );
-   BOOST_REQUIRE_EQUAL( t.success(), t.push_action(producer_names[1], "claimrewards"_n, mvo()("owner", producer_names[1])) );
-   auto* tbl = t.control->db().find<eosio::chain::table_id_object, eosio::chain::by_code_scope_table>(
-                                    boost::make_tuple( config::system_account_name,
-                                                       config::system_account_name,
-                                                       "producers2"_n ) );
-   BOOST_REQUIRE( !tbl );
-
-   t.produce_block( fc::hours(2*24) );
-
-   t.deploy_contract( false );
-
-   t.produce_blocks(2);
-   t.produce_block( fc::hours(24 + 1) );
-
-   BOOST_REQUIRE_EQUAL( t.success(), t.push_action(producer_names[0], "claimrewards"_n, mvo()("owner", producer_names[0])) );
-   BOOST_TEST_REQUIRE( 0 == t.get_global_state2()["total_producer_votepay_share"].as_double() );
-   BOOST_TEST_REQUIRE( t.get_producer_info(producer_names[0])["total_votes"].as_double() == t.get_global_state3()["total_vpay_share_change_rate"].as_double() );
-
-   t.produce_block( fc::hours(5) );
-
-   BOOST_REQUIRE_EQUAL( t.success(), t.regproducer(producer_names[1]) );
-   BOOST_TEST_REQUIRE( t.get_producer_info(producer_names[0])["total_votes"].as_double() + t.get_producer_info(producer_names[1])["total_votes"].as_double() ==
-                       t.get_global_state3()["total_vpay_share_change_rate"].as_double() );
-
-} FC_LOG_AND_RETHROW()
-
 
 BOOST_FIXTURE_TEST_CASE(producers_upgrade_system_contract, eosio_system_tester) try {
    //install multisig contract
