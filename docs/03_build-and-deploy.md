@@ -52,10 +52,10 @@ cd ..
 
 # How to deploy the eosio.contracts
 
-## To deploy eosio.bios contract execute the following command:
+## To deploy flon.bios contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testerbios`
 ```
-cleos set contract testerbios you_local_path_to/eosio.contracts/build/contracts/eosio.bios/ -p testerbios
+cleos set contract testerbios you_local_path_to/eosio.contracts/build/contracts/flon.bios/ -p testerbios
 ```
 
 ## To deploy eosio.msig contract execute the following command:

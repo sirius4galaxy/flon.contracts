@@ -13,7 +13,7 @@
         "source_dirs": [
           "contracts/flon.token/include/flon.token/",
           "contracts/eosio.wrap/include/eosio.wrap/",
-          "contracts/eosio.bios/include/eosio.bios/",
+          "contracts/flon.bios/include/flon.bios/",
           "contracts/flon.system/include/flon.system/",
           "contracts/eosio.msig/include/eosio.msig/"
         ],

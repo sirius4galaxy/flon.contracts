@@ -30,8 +30,8 @@ jobs:
           echo =====
           mkdir built-contracts
           cp \
-            build/contracts/eosio.bios/eosio.bios.abi \
-            build/contracts/eosio.bios/eosio.bios.wasm \
+            build/contracts/flon.bios/flon.bios.abi \
+            build/contracts/flon.bios/flon.bios.wasm \
             build/contracts/eosio.msig/eosio.msig.abi \
             build/contracts/eosio.msig/eosio.msig.wasm \
             build/contracts/flon.system/.powerup/powup.results.abi \

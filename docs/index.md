@@ -8,7 +8,7 @@ The EOSIO blockchain platform is unique in that the features and characteristics
 
 Block.one implements and maintains EOSIO open source platform which contains, as an example, the system contracts encapsulating the base functionality for an EOSIO based blockchain.
 
-1. [eosio.bios](action-reference/eosio.bios)
+1. [flon.bios](action-reference/flon.bios)
 2. [flon.system](action-reference/flon.system)
 3. [eosio.msig](action-reference/eosio.msig)
 4. [flon.token](action-reference/flon.token)
