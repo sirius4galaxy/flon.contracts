@@ -8,7 +8,7 @@ link_text: How to create, issue and transfer a token
 Navigate to your contracts directory.
 
 ```sh
-cd CONTRACTS_DIR
+cd $CONTRACTS_DIR
 ```
 
 Pull the source
@@ -17,7 +17,7 @@ git clone https://github.com/fullon/flon.contracts --branch master --single-bran
 ```
 
 ```sh
-cd eosio.contracts/contracts/flon.token
+cd flon.contracts/contracts/flon.token
 ```
 
 ## Step 2: Create Account for Contract
@@ -37,7 +37,7 @@ eosio-cpp -I include -o flon.token.wasm src/flon.token.cpp --abigen
 ## Step 4: Deploy the Token Contract
 
 ```shell
-cleos set contract flon.token CONTRACTS_DIR/eosio.contracts/contracts/flon.token --abi flon.token.abi -p flon.token@active
+cleos set contract flon.token $CONTRACTS_DIR/flon.contracts/contracts/flon.token --abi flon.token.abi -p flon.token@active
 ```
 
 Result should look similar to the one below:

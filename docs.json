@@ -1,5 +1,5 @@
 {
-  "name": "eosio.contracts",
+  "name": "flon.contracts",
   "generators": [
     {
       "name": "collate_markdown",

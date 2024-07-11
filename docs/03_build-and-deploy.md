@@ -1,6 +1,6 @@
 ---
-content_title: How to build eosio.contracts
-link_text: How to build eosio.contracts
+content_title: How to build flon.contracts
+link_text: How to build flon.contracts
 ---
 
 ## Preconditions
@@ -21,11 +21,11 @@ Run the `build.sh` script in the top directory to build all the contracts.
 
 ### Build contracts manually
 
-To build the `eosio.contracts` execute the following commands.
+To build the `flon.contracts` execute the following commands.
 
 On all platforms except macOS:
 ```sh
-cd you_local_path_to/eosio.contracts/
+cd you_local_path_to/flon.contracts/
 rm -fr build
 mkdir build
 cd build
@@ -36,7 +36,7 @@ cd ..
 
 For macOS:
 ```sh
-cd you_local_path_to/eosio.contracts/
+cd you_local_path_to/flon.contracts/
 rm -fr build
 mkdir build
 cd build
@@ -50,34 +50,34 @@ cd ..
 * The contracts (both `.wasm` and `.abi` files) are built into their corresponding _build/contracts/\<contract name\>_ folder.
 * Finally, simply use __cleos__ to _set contract_ by pointing to the previously mentioned directory for the specific contract.
 
-# How to deploy the eosio.contracts
+# How to deploy the flon.contracts
 
 ## To deploy flon.bios contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testerbios`
 ```
-cleos set contract testerbios you_local_path_to/eosio.contracts/build/contracts/flon.bios/ -p testerbios
+cleos set contract testerbios you_local_path_to/flon.contracts/build/contracts/flon.bios/ -p testerbios
 ```
 
 ## To deploy flon.msig contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testermsig`
 ```
-cleos set contract testermsig you_local_path_to/eosio.contracts/build/contracts/flon.msig/ -p testermsig
+cleos set contract testermsig you_local_path_to/flon.contracts/build/contracts/flon.msig/ -p testermsig
 ```
 
 ## To deploy flon.system contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testersystem`
 ```
-cleos set contract testersystem you_local_path_to/eosio.contracts/build/contracts/flon.system/ -p testersystem
+cleos set contract testersystem you_local_path_to/flon.contracts/build/contracts/flon.system/ -p testersystem
 ```
 
 ## To deploy flon.token contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testertoken`
 ```
-cleos set contract testertoken you_local_path_to/eosio.contracts/build/contracts/flon.token/ -p testertoken
+cleos set contract testertoken you_local_path_to/flon.contracts/build/contracts/flon.token/ -p testertoken
 ```
 
 ## To deploy flon.wrap contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testerwrap`
 ```
-cleos set contract testerwrap you_local_path_to/eosio.contracts/build/contracts/flon.wrap/ -p testerwrap
+cleos set contract testerwrap you_local_path_to/flon.contracts/build/contracts/flon.wrap/ -p testerwrap
 ```

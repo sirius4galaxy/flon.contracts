@@ -123,7 +123,7 @@ struct powerup_state {
 ```
 
 ### Preparation for Upgrade
-1. Build [eosio.contracts](https://github.com/fullon/flon.contracts) with `powerup` code. Version **1.9.x** or greater .
+1. Build [flon.contracts](https://github.com/fullon/flon.contracts) with `powerup` code. Version **1.9.x** or greater .
 2. Deploy flon.system contract to `flon`.
 3. Create account `flon.reserv` and ensure the account has enough RAM, at least 4 KiB.
 4. Deploy `powup.results.abi` to `flon.reserv` account using `setabi`. The ABI can be found in the `build/contracts/flon.system/.powerup/` directory.
