@@ -21,7 +21,7 @@ if [[ "$BUILDKITE" == 'true' ]]; then
     test -z "$CDT_COMMIT" && CDT_COMMIT=$(echo $CDT_VERSION | tr -d '"' | tr -d "''" | cut -d ' ' -f 1) # if both searches returned nothing, the version is probably specified by commit hash already
     test -z "$EOSIO_COMMIT" && EOSIO_COMMIT=$(echo $EOSIO_VERSION | tr -d '"' | tr -d "''" | cut -d ' ' -f 1) # if both searches returned nothing, the version is probably specified by commit hash already
 else
-    git clone https://github.com/fullon/flon.cdt && cd eosio.cdt
+    git clone https://github.com/fullon/flon.cdt && cd flon.cdt
     git pull && git checkout $CDT_VERSION
     CDT_COMMIT=$(git rev-parse --verify HEAD)
     cd ..
@@ -35,6 +35,6 @@ if [[ "$EOSIO_COMMIT" == "$EOSIO_VERSION" ]]; then
 else
     EOSIO_BK_URL="https://buildkite.com/fullon/flon/builds?branch=${EOSIO_VERSION}"
 fi
-echo "Using eosio \"$EOSIO_VERSION\"..."
+echo "Using fullon \"$EOSIO_VERSION\"..."
 echo "Using cdt ${CDT_COMMIT} from \"$CDT_VERSION\"..."
 export CDT_URL="https://eos-public-oss-binaries.s3-us-west-2.amazonaws.com/${CDT_COMMIT:0:7}-eosio.cdt-ubuntu-18.04_amd64.deb"
