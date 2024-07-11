@@ -72,7 +72,7 @@ using namespace eosio_system;
 
 struct powerup_tester : eosio_system_tester {
 
-   powerup_tester() { create_accounts_with_resources({ "eosio.reserv"_n }); }
+   powerup_tester() { create_accounts_with_resources({ "flon.reserv"_n }); }
 
    void start_rex() {
       create_account_with_resources("rexholder111"_n, config::system_account_name, core_sym::from_string("1.0000"),
@@ -198,12 +198,12 @@ struct powerup_tester : eosio_system_tester {
                      const asset& expected_fee, int64_t expected_net, int64_t expected_cpu) {
       auto before_payer    = get_account_info(payer);
       auto before_receiver = get_account_info(receiver);
-      auto before_reserve  = get_account_info("eosio.reserv"_n);
+      auto before_reserve  = get_account_info("flon.reserv"_n);
       auto before_state    = get_state();
       BOOST_REQUIRE_EQUAL("", powerup(payer, receiver, days, net_frac, cpu_frac, expected_fee));
       auto after_payer    = get_account_info(payer);
       auto after_receiver = get_account_info(receiver);
-      auto after_reserve  = get_account_info("eosio.reserv"_n);
+      auto after_reserve  = get_account_info("flon.reserv"_n);
       auto after_state    = get_state();
 
       if (false) {

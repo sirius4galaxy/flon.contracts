@@ -119,7 +119,7 @@ BOOST_FIXTURE_TEST_CASE(native_tests, limitauth_tester) try {
       updateauth({alice, active}, alice, freebie, active, get_public_key(alice, "freebie")));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "noop"_n, freebie));
+      linkauth({alice, active}, alice, "flon.null"_n, "noop"_n, freebie));
 
    // alice@freebie can create alice@freebie2
    BOOST_REQUIRE_EQUAL(
@@ -129,12 +129,12 @@ BOOST_FIXTURE_TEST_CASE(native_tests, limitauth_tester) try {
    // alice@freebie can linkauth
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2));
 
    // alice@freebie can unlinkauth
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n));
 
    // alice@freebie can delete alice@freebie2
    BOOST_REQUIRE_EQUAL(
@@ -155,7 +155,7 @@ BOOST_FIXTURE_TEST_CASE(extended_empty_tests, limitauth_tester) try {
       updateauth({alice, active}, alice, freebie, active, get_public_key(alice, "freebie"), ""_n));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "noop"_n, freebie, ""_n));
+      linkauth({alice, active}, alice, "flon.null"_n, "noop"_n, freebie, ""_n));
 
    // alice@freebie can create alice@freebie2
    BOOST_REQUIRE_EQUAL(
@@ -165,12 +165,12 @@ BOOST_FIXTURE_TEST_CASE(extended_empty_tests, limitauth_tester) try {
    // alice@freebie can linkauth
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, ""_n));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, ""_n));
 
    // alice@freebie can unlinkauth
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, ""_n));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, ""_n));
 
    // alice@freebie can delete alice@freebie2
    BOOST_REQUIRE_EQUAL(
@@ -195,10 +195,10 @@ BOOST_FIXTURE_TEST_CASE(extended_matching_tests, limitauth_tester) try {
 
    BOOST_REQUIRE_EQUAL(
       "missing authority of alice1111111/owner",
-      linkauth({alice, active}, alice, "eosio.null"_n, "noop"_n, freebie, owner));
+      linkauth({alice, active}, alice, "flon.null"_n, "noop"_n, freebie, owner));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "noop"_n, freebie, active));
+      linkauth({alice, active}, alice, "flon.null"_n, "noop"_n, freebie, active));
 
    // alice@freebie can create alice@freebie2
    BOOST_REQUIRE_EQUAL(
@@ -208,15 +208,15 @@ BOOST_FIXTURE_TEST_CASE(extended_matching_tests, limitauth_tester) try {
    // alice@freebie can linkauth
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, freebie));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, freebie));
 
    // alice@freebie can unlinkauth
    BOOST_REQUIRE_EQUAL(
       "missing authority of alice1111111/active",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, active));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, active));
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie));
 
    // alice@freebie can delete alice@freebie2
    BOOST_REQUIRE_EQUAL(
@@ -253,10 +253,10 @@ BOOST_FIXTURE_TEST_CASE(allow_perms_tests, limitauth_tester) try {
       updateauth({alice, active}, alice, admin, active, get_public_key(alice, "admin"), active));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "noop"_n, freebie, active));
+      linkauth({alice, active}, alice, "flon.null"_n, "noop"_n, freebie, active));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "dosomething"_n, admin, active));
+      linkauth({alice, active}, alice, "flon.null"_n, "dosomething"_n, admin, active));
 
    // Bob, who has the published freebie key, tries using updateauth to modify alice@freebie
    BOOST_REQUIRE_EQUAL(
@@ -285,16 +285,16 @@ BOOST_FIXTURE_TEST_CASE(allow_perms_tests, limitauth_tester) try {
    // Bob, who has the published freebie key, tries using linkauth
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, ""_n));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, ""_n));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by does not appear in allow_perms",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, freebie));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, freebie));
    BOOST_REQUIRE_EQUAL(
       "missing authority of alice1111111/active",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, active));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, active));
 
    // Bob, who has the published freebie key, tries using deleteauth
    BOOST_REQUIRE_EQUAL(
@@ -313,16 +313,16 @@ BOOST_FIXTURE_TEST_CASE(allow_perms_tests, limitauth_tester) try {
    // Bob, who has the published freebie key, tries using unlinkauth
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, ""_n));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, ""_n));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by does not appear in allow_perms",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie));
    BOOST_REQUIRE_EQUAL(
       "missing authority of alice1111111/active",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, active));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, active));
 
    // alice@admin can do these
    BOOST_REQUIRE_EQUAL(
@@ -330,10 +330,10 @@ BOOST_FIXTURE_TEST_CASE(allow_perms_tests, limitauth_tester) try {
       updateauth({alice, admin}, alice, admin2, admin, get_public_key(alice, "admin2"), admin));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, admin}, alice, "eosio.null"_n, "dosomething"_n, admin2, admin));
+      linkauth({alice, admin}, alice, "flon.null"_n, "dosomething"_n, admin2, admin));
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, admin}, alice, "eosio.null"_n, "dosomething"_n, admin));
+      unlinkauth({alice, admin}, alice, "flon.null"_n, "dosomething"_n, admin));
    BOOST_REQUIRE_EQUAL(
       "",
       deleteauth({alice, admin}, alice, admin2, admin));
@@ -344,10 +344,10 @@ BOOST_FIXTURE_TEST_CASE(allow_perms_tests, limitauth_tester) try {
       updateauth({alice, active}, alice, admin2, admin, get_public_key(alice, "admin2"), active));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "dosomething"_n, admin2, active));
+      linkauth({alice, active}, alice, "flon.null"_n, "dosomething"_n, admin2, active));
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, active}, alice, "eosio.null"_n, "dosomething"_n, active));
+      unlinkauth({alice, active}, alice, "flon.null"_n, "dosomething"_n, active));
    BOOST_REQUIRE_EQUAL(
       "",
       deleteauth({alice, active}, alice, admin2, active));
@@ -358,10 +358,10 @@ BOOST_FIXTURE_TEST_CASE(allow_perms_tests, limitauth_tester) try {
       updateauth({alice, owner}, alice, admin2, admin, get_public_key(alice, "admin2"), owner));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, owner}, alice, "eosio.null"_n, "dosomething"_n, admin2, owner));
+      linkauth({alice, owner}, alice, "flon.null"_n, "dosomething"_n, admin2, owner));
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, owner}, alice, "eosio.null"_n, "dosomething"_n, owner));
+      unlinkauth({alice, owner}, alice, "flon.null"_n, "dosomething"_n, owner));
    BOOST_REQUIRE_EQUAL(
       "",
       deleteauth({alice, owner}, alice, admin2, owner));
@@ -388,10 +388,10 @@ BOOST_FIXTURE_TEST_CASE(disallow_perms_tests, limitauth_tester) try {
       updateauth({alice, active}, alice, admin, active, get_public_key(alice, "admin"), active));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "noop"_n, freebie, active));
+      linkauth({alice, active}, alice, "flon.null"_n, "noop"_n, freebie, active));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "dosomething"_n, admin, active));
+      linkauth({alice, active}, alice, "flon.null"_n, "dosomething"_n, admin, active));
 
    // Bob, who has the published freebie key, tries using updateauth to modify alice@freebie
    BOOST_REQUIRE_EQUAL(
@@ -420,16 +420,16 @@ BOOST_FIXTURE_TEST_CASE(disallow_perms_tests, limitauth_tester) try {
    // Bob, who has the published freebie key, tries using linkauth
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, ""_n));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, ""_n));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by appears in disallow_perms",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, freebie));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, freebie));
    BOOST_REQUIRE_EQUAL(
       "missing authority of alice1111111/active",
-      linkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie2, active));
+      linkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie2, active));
 
    // Bob, who has the published freebie key, tries using deleteauth
    BOOST_REQUIRE_EQUAL(
@@ -448,16 +448,16 @@ BOOST_FIXTURE_TEST_CASE(disallow_perms_tests, limitauth_tester) try {
    // Bob, who has the published freebie key, tries using unlinkauth
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by is required for this account",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, ""_n));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, ""_n));
    BOOST_REQUIRE_EQUAL(
       "assertion failure with message: authorized_by appears in disallow_perms",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, freebie));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, freebie));
    BOOST_REQUIRE_EQUAL(
       "missing authority of alice1111111/active",
-      unlinkauth({alice, freebie}, alice, "eosio.null"_n, "noop"_n, active));
+      unlinkauth({alice, freebie}, alice, "flon.null"_n, "noop"_n, active));
 
    // alice@admin can do these
    BOOST_REQUIRE_EQUAL(
@@ -465,10 +465,10 @@ BOOST_FIXTURE_TEST_CASE(disallow_perms_tests, limitauth_tester) try {
       updateauth({alice, admin}, alice, admin2, admin, get_public_key(alice, "admin2"), admin));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, admin}, alice, "eosio.null"_n, "dosomething"_n, admin2, admin));
+      linkauth({alice, admin}, alice, "flon.null"_n, "dosomething"_n, admin2, admin));
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, admin}, alice, "eosio.null"_n, "dosomething"_n, admin));
+      unlinkauth({alice, admin}, alice, "flon.null"_n, "dosomething"_n, admin));
    BOOST_REQUIRE_EQUAL(
       "",
       deleteauth({alice, admin}, alice, admin2, admin));
@@ -479,10 +479,10 @@ BOOST_FIXTURE_TEST_CASE(disallow_perms_tests, limitauth_tester) try {
       updateauth({alice, active}, alice, admin2, admin, get_public_key(alice, "admin2"), active));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, active}, alice, "eosio.null"_n, "dosomething"_n, admin2, active));
+      linkauth({alice, active}, alice, "flon.null"_n, "dosomething"_n, admin2, active));
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, active}, alice, "eosio.null"_n, "dosomething"_n, active));
+      unlinkauth({alice, active}, alice, "flon.null"_n, "dosomething"_n, active));
    BOOST_REQUIRE_EQUAL(
       "",
       deleteauth({alice, active}, alice, admin2, active));
@@ -493,10 +493,10 @@ BOOST_FIXTURE_TEST_CASE(disallow_perms_tests, limitauth_tester) try {
       updateauth({alice, owner}, alice, admin2, admin, get_public_key(alice, "admin2"), owner));
    BOOST_REQUIRE_EQUAL(
       "",
-      linkauth({alice, owner}, alice, "eosio.null"_n, "dosomething"_n, admin2, owner));
+      linkauth({alice, owner}, alice, "flon.null"_n, "dosomething"_n, admin2, owner));
    BOOST_REQUIRE_EQUAL(
       "",
-      unlinkauth({alice, owner}, alice, "eosio.null"_n, "dosomething"_n, owner));
+      unlinkauth({alice, owner}, alice, "flon.null"_n, "dosomething"_n, owner));
    BOOST_REQUIRE_EQUAL(
       "",
       deleteauth({alice, owner}, alice, admin2, owner));

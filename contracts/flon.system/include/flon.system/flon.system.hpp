@@ -1334,7 +1334,7 @@ namespace eosiosystem {
           *     (eg. For 5% Annual inflation => annual_rate=500
           *          For 1.5% Annual inflation => annual_rate=150
           * @param inflation_pay_factor - Inverse of the fraction of the inflation used to reward block producers.
-          *     The remaining inflation will be sent to the `eosio.saving` account.
+          *     The remaining inflation will be sent to the `flon.saving` account.
           *     (eg. For 20% of inflation going to block producer rewards   => inflation_pay_factor = 50000
           *          For 100% of inflation going to block producer rewards  => inflation_pay_factor = 10000).
           * @param votepay_factor - Inverse of the fraction of the block producer rewards to be distributed proportional to blocks produced.

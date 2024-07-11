@@ -28,8 +28,8 @@ defund
 delband
 delegatebw
 deleteauth
-eosio
-eosiosystem
+flon
+flonystem
 EOSLIB
 fundcpuloan
 fundnetloan

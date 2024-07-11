@@ -32,8 +32,8 @@ public:
    void basic_setup() {
       produce_blocks( 2 );
 
-      create_accounts({ "flon.token"_n, "eosio.ram"_n, "eosio.ramfee"_n, "eosio.stake"_n,
-               "eosio.bpay"_n, "eosio.vpay"_n, "eosio.saving"_n, "eosio.names"_n, "eosio.rex"_n });
+      create_accounts({ "flon.token"_n, "flon.ram"_n, "flon.ramfee"_n, "flon.stake"_n,
+               "flon.bpay"_n, "flon.vpay"_n, "flon.saving"_n, "flon.names"_n, "flon.rex"_n });
 
 
       produce_blocks( 100 );
@@ -51,7 +51,7 @@ public:
       FC_ASSERT( core_symbol.decimals() == 4, "create_core_token assumes core token has 4 digits of precision" );
       create_currency( "flon.token"_n, config::system_account_name, asset(100000000000000, core_symbol) );
       issue( asset(10000000000000, core_symbol) );
-      BOOST_REQUIRE_EQUAL( asset(10000000000000, core_symbol), get_balance( "eosio", core_symbol ) );
+      BOOST_REQUIRE_EQUAL( asset(10000000000000, core_symbol), get_balance( "flon", core_symbol ) );
    }
 
    void deploy_contract( bool call_init = true ) {
@@ -81,7 +81,7 @@ public:
       create_account_with_resources( "bob111111111"_n, config::system_account_name, core_sym::from_string("0.4500"), false );
       create_account_with_resources( "carol1111111"_n, config::system_account_name, core_sym::from_string("1.0000"), false );
 
-      BOOST_REQUIRE_EQUAL( core_sym::from_string("1000000000.0000"), get_balance("eosio")  + get_balance("eosio.ramfee") + get_balance("eosio.stake") + get_balance("eosio.ram") );
+      BOOST_REQUIRE_EQUAL( core_sym::from_string("1000000000.0000"), get_balance("flon")  + get_balance("flon.ramfee") + get_balance("flon.stake") + get_balance("flon.ram") );
    }
 
    enum class setup_level {
@@ -956,7 +956,7 @@ public:
       abi_serializer msig_abi_ser;
       {
          create_account_with_resources( "flon.msig"_n, config::system_account_name );
-         BOOST_REQUIRE_EQUAL( success(), buyram( "eosio"_n, "flon.msig"_n, core_sym::from_string("5000.0000") ) );
+         BOOST_REQUIRE_EQUAL( success(), buyram( "flon"_n, "flon.msig"_n, core_sym::from_string("5000.0000") ) );
          produce_block();
 
          auto trace = base_tester::push_action(config::system_account_name, "setpriv"_n,
@@ -979,7 +979,7 @@ public:
 
    vector<name> active_and_vote_producers() {
       //stake more than 15% of total EOS supply to activate chain
-      transfer( "eosio"_n, "alice1111111"_n, core_sym::from_string("650000000.0000"), config::system_account_name );
+      transfer( "flon"_n, "alice1111111"_n, core_sym::from_string("650000000.0000"), config::system_account_name );
       BOOST_REQUIRE_EQUAL( success(), stake( "alice1111111"_n, "alice1111111"_n, core_sym::from_string("300000000.0000"), core_sym::from_string("300000000.0000") ) );
 
       // create accounts {defproducera, defproducerb, ..., defproducerz} and register as producers
@@ -1075,7 +1075,7 @@ public:
    }
 
    action_result setinflation( int64_t annual_rate, int64_t inflation_pay_factor, int64_t votepay_factor ) {
-      return push_action( "eosio"_n, "setinflation"_n, mvo()
+      return push_action( "flon"_n, "setinflation"_n, mvo()
                ("annual_rate",     annual_rate)
                ("inflation_pay_factor", inflation_pay_factor)
                ("votepay_factor", votepay_factor)

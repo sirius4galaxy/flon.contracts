@@ -546,7 +546,7 @@ namespace eosiosystem {
          return { delete_loan, delta_stake };
       };
 
-      /// transfer from eosio.names to eosio.rex
+      /// transfer from flon.names to flon.rex
       if ( pool->namebid_proceeds.amount > 0 ) {
          channel_to_rex( names_account, pool->namebid_proceeds );
          _rexpool.modify( pool, same_payer, [&]( auto& rt ) {
