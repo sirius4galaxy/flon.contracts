@@ -159,7 +159,7 @@ transaction eosio_msig_tester::reqauth( account_name from, const vector<permissi
       );
    }
    fc::variant pretty_trx = fc::mutable_variant_object()
-      ("expiration", "2020-01-01T00:30")
+      ("expiration", control->head_block_time() + fc::seconds(DEFAULT_EXPIRATION_DELTA))
       ("ref_block_num", 2)
       ("ref_block_prefix", 3)
       ("max_net_usage_words", 0)
@@ -333,7 +333,7 @@ BOOST_FIXTURE_TEST_CASE( big_transaction, eosio_msig_tester ) try {
    auto wasm = contracts::util::exchange_wasm();
 
    fc::variant pretty_trx = fc::mutable_variant_object()
-      ("expiration", "2020-01-01T00:30")
+      ("expiration", control->head_block_time() + fc::seconds(DEFAULT_EXPIRATION_DELTA))
       ("ref_block_num", 2)
       ("ref_block_prefix", 3)
       ("max_net_usage_words", 0)
@@ -453,7 +453,7 @@ BOOST_FIXTURE_TEST_CASE( update_system_contract_all_approve, eosio_msig_tester )
    auto wasm = contracts::util::reject_all_wasm();
 
    fc::variant pretty_trx = fc::mutable_variant_object()
-      ("expiration", "2020-01-01T00:30")
+      ("expiration", control->head_block_time() + fc::seconds(DEFAULT_EXPIRATION_DELTA))
       ("ref_block_num", 2)
       ("ref_block_prefix", 3)
       ("max_net_usage_words", 0)
@@ -579,7 +579,7 @@ BOOST_FIXTURE_TEST_CASE( update_system_contract_major_approve, eosio_msig_tester
    auto wasm = contracts::util::reject_all_wasm();
 
    fc::variant pretty_trx = fc::mutable_variant_object()
-      ("expiration", "2020-01-01T00:30")
+      ("expiration", control->head_block_time() + fc::seconds(DEFAULT_EXPIRATION_DELTA))
       ("ref_block_num", 2)
       ("ref_block_prefix", 3)
       ("max_net_usage_words", 0)
