@@ -32,8 +32,8 @@ jobs:
           cp \
             build/contracts/flon.bios/flon.bios.abi \
             build/contracts/flon.bios/flon.bios.wasm \
-            build/contracts/eosio.msig/eosio.msig.abi \
-            build/contracts/eosio.msig/eosio.msig.wasm \
+            build/contracts/flon.msig/flon.msig.abi \
+            build/contracts/flon.msig/flon.msig.wasm \
             build/contracts/flon.system/.powerup/powup.results.abi \
             build/contracts/flon.system/.rex/rex.results.abi \
             build/contracts/flon.system/flon.system.abi \

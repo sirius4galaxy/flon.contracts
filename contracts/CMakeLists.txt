@@ -45,7 +45,7 @@ set(VOTING_ICON_URI "voting.png#db28cd3db6e62d4509af3644ce7d377329482a14bb4bfaca
 
 add_subdirectory(flon.bios)
 add_subdirectory(flon.boot)
-add_subdirectory(eosio.msig)
+add_subdirectory(flon.msig)
 add_subdirectory(flon.system)
 add_subdirectory(flon.token)
 add_subdirectory(eosio.wrap)

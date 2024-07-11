@@ -15,7 +15,7 @@
           "contracts/eosio.wrap/include/eosio.wrap/",
           "contracts/flon.bios/include/flon.bios/",
           "contracts/flon.system/include/flon.system/",
-          "contracts/eosio.msig/include/eosio.msig/"
+          "contracts/flon.msig/include/flon.msig/"
         ],
         "output_dir": "action-reference"
       }

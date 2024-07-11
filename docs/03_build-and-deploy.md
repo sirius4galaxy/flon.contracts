@@ -58,10 +58,10 @@ Let's assume your account name to which you want to deploy the contract is `test
 cleos set contract testerbios you_local_path_to/eosio.contracts/build/contracts/flon.bios/ -p testerbios
 ```
 
-## To deploy eosio.msig contract execute the following command:
+## To deploy flon.msig contract execute the following command:
 Let's assume your account name to which you want to deploy the contract is `testermsig`
 ```
-cleos set contract testermsig you_local_path_to/eosio.contracts/build/contracts/eosio.msig/ -p testermsig
+cleos set contract testermsig you_local_path_to/eosio.contracts/build/contracts/flon.msig/ -p testermsig
 ```
 
 ## To deploy flon.system contract execute the following command:
