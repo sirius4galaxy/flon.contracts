@@ -24,7 +24,7 @@ INDEX='1'
 echo "$ curl -sSf $CDT_URL --output eosio.cdt.deb"
 while ! $(curl -sSf $CDT_URL --output eosio.cdt.deb); do
     echo "ERROR: Expected CDT binary for commit ${CDT_COMMIT} from $CDT_VERSION. It does not exist at $CDT_URL!"
-    printf "There must be a successful build against ${CDT_COMMIT} \033]1339;url=https://buildkite.com/EOSIO/eosio-dot-cdt/builds?commit=$CDT_COMMIT;content=here\a for this package to exist.\n"
+    printf "There must be a successful build against ${CDT_COMMIT} \033]1339;url=https://buildkite.com/fullon/flon-dot-cdt/builds?commit=$CDT_COMMIT;content=here\a for this package to exist.\n"
     echo "Attempt $INDEX, retry in 60 seconds..."
     echo ''
     INDEX=$(( $INDEX + 1 ))

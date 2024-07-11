@@ -2,11 +2,11 @@
 content_title: About System Contracts
 ---
 
-The EOSIO blockchain platform is unique in that the features and characteristics of the blockchain built on it are flexible, that is, they can be changed, or modified completely to suit each business case requirement. Core blockchain features such as consensus, fee schedules, account creation and modification, token economics, block producer registration, voting, multi-sig, etc., are implemented inside smart contracts which are deployed on the blockchain built on the EOSIO platform.
+The FULLON blockchain platform is unique in that the features and characteristics of the blockchain built on it are flexible, that is, they can be changed, or modified completely to suit each business case requirement. Core blockchain features such as consensus, fee schedules, account creation and modification, token economics, block producer registration, voting, multi-sig, etc., are implemented inside smart contracts which are deployed on the blockchain built on the FULLON platform.
 
 ## System contracts defined in eosio.contracts
 
-Block.one implements and maintains EOSIO open source platform which contains, as an example, the system contracts encapsulating the base functionality for an EOSIO based blockchain.
+Block.one implements and maintains FULLON open source platform which contains, as an example, the system contracts encapsulating the base functionality for an FULLON based blockchain.
 
 1. [flon.bios](action-reference/flon.bios)
 2. [flon.system](action-reference/flon.system)

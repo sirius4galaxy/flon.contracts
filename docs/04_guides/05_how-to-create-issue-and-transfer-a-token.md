@@ -13,7 +13,7 @@ cd CONTRACTS_DIR
 
 Pull the source
 ```sh
-git clone https://github.com/EOSIO/eosio.contracts --branch master --single-branch
+git clone https://github.com/fullon/flon.contracts --branch master --single-branch
 ```
 
 ```sh
