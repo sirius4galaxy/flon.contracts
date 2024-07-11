@@ -50,4 +50,7 @@ add_subdirectory(flon.system)
 add_subdirectory(flon.token)
 add_subdirectory(flon.wrap)
 
-add_subdirectory(test_contracts)
+if(BUILD_TESTS)
+  message(STATUS "Building test contracts.")
+  add_subdirectory(test_contracts)
+endif()
