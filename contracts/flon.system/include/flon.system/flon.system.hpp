@@ -63,7 +63,7 @@ namespace eosiosystem {
    }
 
    static constexpr uint32_t calc_blocks_by_sec(uint32_t sec) {
-      return sec * block_timestamp::block_interval_ms / 1000;
+      return sec * 1000 / block_timestamp::block_interval_ms;
    }
 
    static constexpr uint32_t seconds_per_year      = 52 * 7 * 24 * 3600;
