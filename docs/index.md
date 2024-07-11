@@ -12,7 +12,7 @@ Block.one implements and maintains EOSIO open source platform which contains, as
 2. [flon.system](action-reference/flon.system)
 3. [flon.msig](action-reference/flon.msig)
 4. [flon.token](action-reference/flon.token)
-5. [eosio.wrap](action-reference/eosio.wrap)
+5. [flon.wrap](action-reference/flon.wrap)
 
 ## Key Concepts Implemented by flon.system
 

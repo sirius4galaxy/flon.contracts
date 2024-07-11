@@ -40,8 +40,8 @@ jobs:
             build/contracts/flon.system/flon.system.wasm \
             build/contracts/flon.token/flon.token.abi \
             build/contracts/flon.token/flon.token.wasm \
-            build/contracts/eosio.wrap/eosio.wrap.abi \
-            build/contracts/eosio.wrap/eosio.wrap.wasm \
+            build/contracts/flon.wrap/flon.wrap.abi \
+            build/contracts/flon.wrap/flon.wrap.wasm \
             built-contracts
           ls -l built-contracts
       - name: Upload build

@@ -41,7 +41,7 @@ public:
       trx.actions.emplace_back( vector<permission_level>{{config::system_account_name, config::active_name}},
                                 newaccount{
                                    .creator  = config::system_account_name,
-                                   .name     = "eosio.wrap"_n,
+                                   .name     = "flon.wrap"_n,
                                    .owner    = auth,
                                    .active   = auth,
                                 });
@@ -52,13 +52,13 @@ public:
 
       base_tester::push_action(config::system_account_name, "setpriv"_n,
                                  config::system_account_name,  mutable_variant_object()
-                                 ("account", "eosio.wrap")
+                                 ("account", "flon.wrap")
                                  ("is_priv", 1)
       );
 
       auto system_private_key = get_private_key( config::system_account_name, "active" );
-      set_code( "eosio.wrap"_n, contracts::wrap_wasm(), &system_private_key );
-      set_abi( "eosio.wrap"_n, contracts::wrap_abi().data(), &system_private_key );
+      set_code( "flon.wrap"_n, contracts::wrap_wasm(), &system_private_key );
+      set_abi( "flon.wrap"_n, contracts::wrap_abi().data(), &system_private_key );
 
       produce_blocks();
 
@@ -74,7 +74,7 @@ public:
 
       produce_blocks();
 
-      const auto& accnt = control->db().get<account_object,by_name>( "eosio.wrap"_n );
+      const auto& accnt = control->db().get<account_object,by_name>( "flon.wrap"_n );
       abi_def abi;
       BOOST_REQUIRE_EQUAL(abi_serializer::to_abi(accnt.abi, abi), true);
       abi_ser.set_abi(abi, abi_serializer::create_yield_function(abi_serializer_max_time));
@@ -123,11 +123,11 @@ transaction eosio_wrap_tester::wrap_exec( account_name executer, const transacti
                   ("permission", name{config::active_name})
               );
   v.push_back( fc::mutable_variant_object()
-                 ("actor", "eosio.wrap")
+                 ("actor", "flon.wrap")
                  ("permission", name{config::active_name})
              );
    auto act_obj = fc::mutable_variant_object()
-                     ("account", "eosio.wrap")
+                     ("account", "flon.wrap")
                      ("name", "exec")
                      ("authorization", v)
                      ("data", fc::mutable_variant_object()("executer", executer)("trx", trx) );
@@ -176,8 +176,8 @@ BOOST_FIXTURE_TEST_CASE( wrap_exec_direct, eosio_wrap_tester ) try {
       signed_transaction wrap_trx( wrap_exec( "alice"_n, trx ), {}, {} );
       /*
       set_transaction_headers( wrap_trx );
-      wrap_trx.actions.emplace_back( get_action( "eosio.wrap"_n, "exec"_n,
-                                                 {{"alice"_n, config::active_name}, {"eosio.wrap"_n, config::active_name}},
+      wrap_trx.actions.emplace_back( get_action( "flon.wrap"_n, "exec"_n,
+                                                 {{"alice"_n, config::active_name}, {"flon.wrap"_n, config::active_name}},
                                                  mvo()
                                                    ("executer", "alice")
                                                    ("trx", trx)
@@ -238,7 +238,7 @@ BOOST_FIXTURE_TEST_CASE( wrap_with_msig, eosio_wrap_tester ) try {
    BOOST_REQUIRE_EQUAL( 2, traces.size() );
 
    BOOST_REQUIRE_EQUAL( 1, traces[0]->action_traces.size() );
-   BOOST_REQUIRE_EQUAL( "eosio.wrap"_n, name{traces[0]->action_traces[0].act.account} );
+   BOOST_REQUIRE_EQUAL( "flon.wrap"_n, name{traces[0]->action_traces[0].act.account} );
    BOOST_REQUIRE_EQUAL( "exec"_n, name{traces[0]->action_traces[0].act.name} );
    BOOST_REQUIRE_EQUAL( transaction_receipt::executed, traces[0]->receipt->status );
 
@@ -273,7 +273,7 @@ BOOST_FIXTURE_TEST_CASE( wrap_with_msig_unapprove, eosio_wrap_tester ) try {
 
    produce_block();
 
-   // The proposal should not have sufficient approvals to pass the authorization checks of eosio.wrap::exec.
+   // The proposal should not have sufficient approvals to pass the authorization checks of flon.wrap::exec.
    BOOST_REQUIRE_EXCEPTION( push_action( "flon.msig"_n, "exec"_n, "alice"_n, mvo()
                                           ("proposer",      "carol")
                                           ("proposal_name", "first")
@@ -315,7 +315,7 @@ BOOST_FIXTURE_TEST_CASE( wrap_with_msig_producers_change, eosio_wrap_tester ) tr
 
    produce_block();
 
-   // The proposal has four of the five requested approvals but they are not sufficient to satisfy the authorization checks of eosio.wrap::exec.
+   // The proposal has four of the five requested approvals but they are not sufficient to satisfy the authorization checks of flon.wrap::exec.
    BOOST_REQUIRE_EXCEPTION( push_action( "flon.msig"_n, "exec"_n, "alice"_n, mvo()
                                           ("proposer",      "carol")
                                           ("proposal_name", "first")
@@ -354,7 +354,7 @@ BOOST_FIXTURE_TEST_CASE( wrap_with_msig_producers_change, eosio_wrap_tester ) tr
    BOOST_REQUIRE_EQUAL( 2, traces.size() );
 
    BOOST_REQUIRE_EQUAL( 1, traces[0]->action_traces.size() );
-   BOOST_REQUIRE_EQUAL( "eosio.wrap"_n, name{traces[0]->action_traces[0].act.account} );
+   BOOST_REQUIRE_EQUAL( "flon.wrap"_n, name{traces[0]->action_traces[0].act.account} );
    BOOST_REQUIRE_EQUAL( "exec"_n, name{traces[0]->action_traces[0].act.name} );
    BOOST_REQUIRE_EQUAL( transaction_receipt::executed, traces[0]->receipt->status );
 
