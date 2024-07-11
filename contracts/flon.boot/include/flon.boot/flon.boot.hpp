@@ -104,16 +104,16 @@ namespace eosioboot {
    };
 
    /**
-    * @defgroup eosioboot eosio.boot
+    * @defgroup eosioboot flon.boot
     * @ingroup eosiocontracts
     *
-    * eosio.boot is a extremely minimalistic system contract that only supports the native actions and an
+    * flon.boot is a extremely minimalistic system contract that only supports the native actions and an
     * activate action that allows activating desired protocol features prior to deploying a system contract
     * with more features such as flon.bios or flon.system.
     *
     * @{
     */
-   class [[eosio::contract("eosio.boot")]] boot : public eosio::contract {
+   class [[eosio::contract("flon.boot")]] boot : public eosio::contract {
       public:
          using contract::contract;
          /**
@@ -295,5 +295,5 @@ namespace eosioboot {
          using reqactivated_action = action_wrapper<"reqactivated"_n, &boot::reqactivated>;
          using onblock_action = action_wrapper<"onblock"_n, &boot::onblock>;
    };
-   /** @}*/ // end of @defgroup eosioboot eosio.boot
+   /** @}*/ // end of @defgroup eosioboot flon.boot
 } /// namespace eosioboot
