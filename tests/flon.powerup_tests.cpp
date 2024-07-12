@@ -1,3 +1,4 @@
+#ifdef ENABLED_POWERUP
 #include <Runtime/Runtime.h>
 #include <boost/test/unit_test.hpp>
 #include <cstdlib>
@@ -255,7 +256,7 @@ bool near(A a, B b, D delta) {
 BOOST_AUTO_TEST_SUITE(eosio_system_powerup_tests)
 
 BOOST_FIXTURE_TEST_CASE(config_tests, powerup_tester) try {
-   BOOST_REQUIRE_EQUAL("missing authority of eosio",
+   BOOST_REQUIRE_EQUAL("missing authority of flon",
                        push_action("alice1111111"_n, "cfgpowerup"_n, mvo()("args", make_config())));
    BOOST_REQUIRE_EQUAL(wasm_assert_msg("powerup hasn't been initialized"), powerupexec("alice1111111"_n, 10));
 
@@ -398,10 +399,10 @@ BOOST_FIXTURE_TEST_CASE(weight_tests, powerup_tester) try {
    for (int i = 0; i <= 6; ++i) {
       if (i == 2) {
          // Leaves config as-is, but may introduce slight rounding
-         produce_block(fc::days(1) - fc::milliseconds(500));
+         produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
          BOOST_REQUIRE_EQUAL("", configbw({}));
       } else if (i) {
-         produce_block(fc::days(1) - fc::milliseconds(500));
+         produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
          BOOST_REQUIRE_EQUAL("", powerupexec(config::system_account_name, 10));
       }
       net = net_start + i * (net_target - net_start) / 10;
@@ -414,7 +415,7 @@ BOOST_FIXTURE_TEST_CASE(weight_tests, powerup_tester) try {
    // Extend transition time
    {
       int i = 7;
-      produce_block(fc::days(1) - fc::milliseconds(500));
+      produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", configbw(make_default_config([&](powerup_config& config) {
                              config.net.target_timestamp = control->head_block_time() + fc::days(30);
                              config.cpu.target_timestamp = control->head_block_time() + fc::days(40);
@@ -428,7 +429,7 @@ BOOST_FIXTURE_TEST_CASE(weight_tests, powerup_tester) try {
 
    for (int i = 0; i <= 5; ++i) {
       if (i) {
-         produce_block(fc::days(1) - fc::milliseconds(500));
+         produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
          BOOST_REQUIRE_EQUAL("", powerupexec(config::system_account_name, 10));
       }
       net = net_start + i * (net_target - net_start) / 30;
@@ -441,7 +442,7 @@ BOOST_FIXTURE_TEST_CASE(weight_tests, powerup_tester) try {
    // Change target, keep existing transition time
    {
       int i = 6;
-      produce_block(fc::days(1) - fc::milliseconds(500));
+      produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
       auto new_net_target = net_target / 10;
       auto new_cpu_target = cpu_target / 20;
       BOOST_REQUIRE_EQUAL("", configbw(make_default_config([&](powerup_config& config) {
@@ -459,7 +460,7 @@ BOOST_FIXTURE_TEST_CASE(weight_tests, powerup_tester) try {
 
    for (int i = 0; i <= 10; ++i) {
       if (i) {
-         produce_block(fc::days(1) - fc::milliseconds(500));
+         produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
          BOOST_REQUIRE_EQUAL("", powerupexec(config::system_account_name, 10));
       }
       net = net_start + i * (net_target - net_start) / (30 - 6);
@@ -471,7 +472,7 @@ BOOST_FIXTURE_TEST_CASE(weight_tests, powerup_tester) try {
 
    // Move transition time to immediate future
    {
-      produce_block(fc::days(1) - fc::milliseconds(500));
+      produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", configbw(make_default_config([&](powerup_config& config) {
                              config.net.target_timestamp = control->head_block_time() + fc::milliseconds(1000);
                              config.cpu.target_timestamp = control->head_block_time() + fc::milliseconds(1000);
@@ -554,13 +555,13 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
                      asset::from_string("300000.0000 TST"), net_weight * .1, cpu_weight * .2);
 
       // Start decay
-      t.produce_block(fc::days(30) - fc::milliseconds(500));
+      t.produce_block(fc::days(30) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", t.powerupexec(config::system_account_name, 10));
       BOOST_REQUIRE(near(t.get_state().net.adjusted_utilization, .1 * net_weight, 0));
       BOOST_REQUIRE(near(t.get_state().cpu.adjusted_utilization, .2 * cpu_weight, 0));
 
       // 2 days of decay from (10%, 20%) to (1.35%, 2.71%)
-      t.produce_block(fc::days(2) - fc::milliseconds(500));
+      t.produce_block(fc::days(2) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", t.powerupexec(config::system_account_name, 10));
       BOOST_REQUIRE(near(t.get_state().net.adjusted_utilization, int64_t(.1 * net_weight * exp(-2)),
                          int64_t(.1 * net_weight * exp(-2)) / 1000));
@@ -750,7 +751,7 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
       BOOST_REQUIRE_EQUAL(t.wasm_assert_msg("market doesn't have enough resources available"), //
                           t.powerup("bob111111111"_n, "alice1111111"_n, 30, powerup_frac / 1000, powerup_frac / 1000,
                                    asset::from_string("1.0000 TST")));
-      t.produce_block(fc::milliseconds(500));
+      t.produce_block(fc::milliseconds(config::block_interval_ms));
 
       // immediate renewal: adjusted_utilization doesn't have time to fall
       //
@@ -782,7 +783,7 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
       BOOST_REQUIRE(near(t.get_state().cpu.adjusted_utilization, cpu_weight, cpu_weight / 1000));
 
       // 1 day of decay
-      t.produce_block(fc::days(1) - fc::milliseconds(500));
+      t.produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", t.powerupexec(config::system_account_name, 10));
       BOOST_REQUIRE(near(t.get_state().net.adjusted_utilization, int64_t(net_weight * exp(-1)),
                          int64_t(net_weight * exp(-1)) / 1000));
@@ -790,7 +791,7 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
                          int64_t(cpu_weight * exp(-1)) / 1000));
 
       // 1 day of decay
-      t.produce_block(fc::days(1) - fc::milliseconds(500));
+      t.produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", t.powerupexec(config::system_account_name, 10));
       BOOST_REQUIRE(near(t.get_state().net.adjusted_utilization, int64_t(net_weight * exp(-2)),
                          int64_t(net_weight * exp(-2)) / 1000));
@@ -819,7 +820,7 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
       t.check_powerup("aaaaaaaaaaaa"_n, "bbbbbbbbbbbb"_n, 30, powerup_frac * .1, powerup_frac * .2,
                      asset::from_string("26000.0002 TST"), net_weight * .1, cpu_weight * .2);
 
-      t.produce_block(fc::days(15) - fc::milliseconds(500));
+      t.produce_block(fc::days(15) - fc::milliseconds(config::block_interval_ms));
 
       // 20%, 20%
       // (.3 ^ 2) * 2000000.0000 / 2 - 10000.0000 =  80000.0000
@@ -836,7 +837,7 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
       BOOST_REQUIRE(near(t.get_state().cpu.adjusted_utilization, .4 * cpu_weight, 0));
 
       // 1 day of decay from (30%, 40%) to (20%, 20%)
-      t.produce_block(fc::days(1) - fc::milliseconds(500));
+      t.produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", t.powerupexec(config::system_account_name, 10));
       BOOST_REQUIRE(
             near(t.get_state().net.adjusted_utilization, int64_t(.1 * net_weight * exp(-1) + .2 * net_weight), 0));
@@ -844,7 +845,7 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
             near(t.get_state().cpu.adjusted_utilization, int64_t(.2 * cpu_weight * exp(-1) + .2 * cpu_weight), 0));
 
       // 2 days of decay from (30%, 40%) to (20%, 20%)
-      t.produce_block(fc::days(1) - fc::milliseconds(500));
+      t.produce_block(fc::days(1) - fc::milliseconds(config::block_interval_ms));
       BOOST_REQUIRE_EQUAL("", t.powerupexec(config::system_account_name, 10));
       BOOST_REQUIRE(
             near(t.get_state().net.adjusted_utilization, int64_t(.1 * net_weight * exp(-2) + .2 * net_weight), 0));
@@ -856,3 +857,4 @@ BOOST_AUTO_TEST_CASE(rent_tests) try {
 FC_LOG_AND_RETHROW()
 
 BOOST_AUTO_TEST_SUITE_END()
+#endif//ENABLED_POWERUP
