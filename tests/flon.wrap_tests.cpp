@@ -233,7 +233,7 @@ BOOST_FIXTURE_TEST_CASE( wrap_with_msig, eosio_wrap_tester ) try {
                   ("executer",      "alice")
    );
 
-   produce_block();
+   produce_blocks(2);
 
    BOOST_REQUIRE_EQUAL( 2, traces.size() );
 
@@ -349,7 +349,7 @@ BOOST_FIXTURE_TEST_CASE( wrap_with_msig_producers_change, eosio_wrap_tester ) tr
                   ("executer",      "alice")
    );
 
-   produce_block();
+   produce_blocks(2);
 
    BOOST_REQUIRE_EQUAL( 2, traces.size() );
 
