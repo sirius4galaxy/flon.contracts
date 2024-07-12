@@ -1760,6 +1760,7 @@ BOOST_AUTO_TEST_CASE(extreme_inflation) try {
    BOOST_REQUIRE_EQUAL(t.wasm_assert_msg("quantity exceeds available supply"), t.push_action("defproducera"_n, "claimrewards"_n, mvo()("owner", "defproducera")));
 } FC_LOG_AND_RETHROW()
 
+#ifdef ENABLED_VOTEPAY
 BOOST_FIXTURE_TEST_CASE(multiple_producer_pay, eosio_system_tester, * boost::unit_test::tolerance(1e-10)) try {
 
    const int64_t secs_per_year  = 52 * 7 * 24 * 3600;
@@ -2021,9 +2022,9 @@ BOOST_FIXTURE_TEST_CASE(multiple_producer_pay, eosio_system_tester, * boost::uni
       BOOST_REQUIRE( info["is_active"].as<bool>() );
       BOOST_REQUIRE( fc::crypto::public_key() != fc::crypto::public_key(info["producer_key"].as_string()) );
 
-      BOOST_REQUIRE_EQUAL( error("missing authority of eosio"),
+      BOOST_REQUIRE_EQUAL( error("missing authority of flon"),
                            push_action(prod_name, "rmvproducer"_n, mvo()("producer", prod_name)));
-      BOOST_REQUIRE_EQUAL( error("missing authority of eosio"),
+      BOOST_REQUIRE_EQUAL( error("missing authority of flon"),
                            push_action(producer_names[rmv_index + 2], "rmvproducer"_n, mvo()("producer", prod_name) ) );
       BOOST_REQUIRE_EQUAL( success(),
                            push_action(config::system_account_name, "rmvproducer"_n, mvo()("producer", prod_name) ) );
@@ -2067,7 +2068,7 @@ BOOST_FIXTURE_TEST_CASE(multiple_producer_pay, eosio_system_tester, * boost::uni
    // switch to new producer pay metric
    {
       BOOST_REQUIRE_EQUAL( 0, get_global_state2()["revision"].as<uint8_t>() );
-      BOOST_REQUIRE_EQUAL( error("missing authority of eosio"),
+      BOOST_REQUIRE_EQUAL( error("missing authority of flon"),
                            push_action(producer_names[1], "updtrevision"_n, mvo()("revision", 1) ) );
       BOOST_REQUIRE_EQUAL( success(),
                            push_action(config::system_account_name, "updtrevision"_n, mvo()("revision", 1) ) );
@@ -2644,6 +2645,8 @@ BOOST_FIXTURE_TEST_CASE(votepay_transition, eosio_system_tester, * boost::unit_t
 
 } FC_LOG_AND_RETHROW()
 
+#endif//ENABLED_VOTEPAY
+
 BOOST_FIXTURE_TEST_CASE(producers_upgrade_system_contract, eosio_system_tester) try {
    //install multisig contract
    abi_serializer msig_abi_ser = initialize_multisig();
@@ -2677,7 +2680,7 @@ BOOST_FIXTURE_TEST_CASE(producers_upgrade_system_contract, eosio_system_tester) 
       std::copy( msg.begin(), msg.end(), it );
 
       fc::variant pretty_trx = fc::mutable_variant_object()
-         ("expiration", "2020-01-01T00:30")
+         ("expiration", control->head_block_time() + fc::seconds(300))
          ("ref_block_num", 2)
          ("ref_block_prefix", 3)
          ("net_usage_words", 0)
@@ -3458,7 +3461,7 @@ BOOST_FIXTURE_TEST_CASE( setparams, eosio_system_tester ) try {
    transaction trx;
    {
       fc::variant pretty_trx = fc::mutable_variant_object()
-         ("expiration", "2020-01-01T00:30")
+         ("expiration", control->head_block_time() + fc::seconds(300))
          ("ref_block_num", 2)
          ("ref_block_prefix", 3)
          ("net_usage_words", 0)
@@ -3549,7 +3552,7 @@ BOOST_FIXTURE_TEST_CASE( wasmcfg, eosio_system_tester ) try {
    transaction trx;
    {
       fc::variant pretty_trx = fc::mutable_variant_object()
-         ("expiration", "2020-01-01T00:30")
+         ("expiration", control->head_block_time() + fc::seconds(300))
          ("ref_block_num", 2)
          ("ref_block_prefix", 3)
          ("net_usage_words", 0)
@@ -3647,7 +3650,7 @@ BOOST_FIXTURE_TEST_CASE( setram_effect, eosio_system_tester ) try {
       // increase max_ram_size, ram bought by name_b loses part of its value
       BOOST_REQUIRE_EQUAL( wasm_assert_msg("ram may only be increased"),
                            push_action(config::system_account_name, "setram"_n, mvo()("max_ram_size", 64ll*1024 * 1024 * 1024)) );
-      BOOST_REQUIRE_EQUAL( error("missing authority of eosio"),
+      BOOST_REQUIRE_EQUAL( error("missing authority of flon"),
                            push_action(name_b, "setram"_n, mvo()("max_ram_size", 80ll*1024 * 1024 * 1024)) );
       BOOST_REQUIRE_EQUAL( success(),
                            push_action(config::system_account_name, "setram"_n, mvo()("max_ram_size", 80ll*1024 * 1024 * 1024)) );
@@ -3692,7 +3695,7 @@ BOOST_FIXTURE_TEST_CASE( ram_inflation, eosio_system_tester ) try {
    BOOST_REQUIRE_EQUAL( success(), buyrambytes( "alice1111111", "alice1111111", 100 ) );
    BOOST_REQUIRE_EQUAL( cur_ram_size + 2 * rate, get_global_state()["max_ram_size"].as_uint64() );
 
-   BOOST_REQUIRE_EQUAL( error("missing authority of eosio"),
+   BOOST_REQUIRE_EQUAL( error("missing authority of flon"),
                         push_action( "alice1111111"_n, "setramrate"_n, mvo()("bytes_per_block", rate) ) );
 
    cur_ram_size = get_global_state()["max_ram_size"].as_uint64();
@@ -3890,6 +3893,7 @@ BOOST_FIXTURE_TEST_CASE( rex_rounding_issue, eosio_system_tester ) try {
 
 } FC_LOG_AND_RETHROW()
 
+#ifdef ENABLED_REX
 BOOST_FIXTURE_TEST_CASE( rex_auth, eosio_system_tester ) try {
 
    const std::vector<account_name> accounts = { "aliceaccount"_n, "bobbyaccount"_n };
@@ -3922,7 +3926,7 @@ BOOST_FIXTURE_TEST_CASE( rex_auth, eosio_system_tester ) try {
    BOOST_REQUIRE_EQUAL( error(error_msg), push_action( bob, "mvfrsavings"_n, mvo()("owner", alice)("rex", one_rex) ) );
    BOOST_REQUIRE_EQUAL( error(error_msg), push_action( bob, "closerex"_n, mvo()("owner", alice) ) );
 
-   BOOST_REQUIRE_EQUAL( error("missing authority of eosio"), push_action( alice, "setrex"_n, mvo()("balance", one_eos) ) );
+   BOOST_REQUIRE_EQUAL( error("missing authority of flon"), push_action( alice, "setrex"_n, mvo()("balance", one_eos) ) );
 
 } FC_LOG_AND_RETHROW()
 
@@ -5355,9 +5359,9 @@ BOOST_FIXTURE_TEST_CASE( set_rex, eosio_system_tester ) try {
    const asset set_total_rent   = core_sym::from_string("10000.0000");
    const asset negative_balance = core_sym::from_string("-10000.0000");
    const asset different_symbol = asset::from_string("10000.0000 RND");
-   BOOST_REQUIRE_EQUAL( error("missing authority of eosio"),
+   BOOST_REQUIRE_EQUAL( error("missing authority of flon"),
                         push_action( alice, act_name, mvo()("balance", set_total_rent) ) );
-   BOOST_REQUIRE_EQUAL( error("missing authority of eosio"),
+   BOOST_REQUIRE_EQUAL( error("missing authority of flon"),
                         push_action( bob, act_name, mvo()("balance", set_total_rent) ) );
    BOOST_REQUIRE_EQUAL( wasm_assert_msg("rex system is not initialized"),
                         push_action( config::system_account_name, act_name, mvo()("balance", set_total_rent) ) );
@@ -5382,8 +5386,9 @@ BOOST_FIXTURE_TEST_CASE( set_rex, eosio_system_tester ) try {
    BOOST_REQUIRE_EQUAL( set_total_rent,                                curr_rex_pool["total_rent"].as<asset>() );
 
 } FC_LOG_AND_RETHROW()
+#endif//update_rex_account
 
-
+#ifdef ENABLED_B1
 BOOST_FIXTURE_TEST_CASE( b1_vesting, eosio_system_tester ) try {
 
    cross_15_percent_threshold();
@@ -5430,7 +5435,7 @@ BOOST_FIXTURE_TEST_CASE( b1_vesting, eosio_system_tester ) try {
    BOOST_REQUIRE_EQUAL( wasm_assert_msg("must vote for at least 21 producers or for a proxy before buying REX"),
                         unstaketorex( b1, b1, final_amount - small_amount, final_amount - small_amount ) );
 
-   BOOST_REQUIRE_EQUAL( error("missing authority of eosio"), vote( b1, { }, "proxyaccount"_n ) );
+   BOOST_REQUIRE_EQUAL( error("missing authority of flon"), vote( b1, { }, "proxyaccount"_n ) );
 
    BOOST_REQUIRE_EQUAL( success(), unstake( b1, b1, final_amount - small_amount, final_amount - small_amount ) );
 
@@ -5444,8 +5449,9 @@ BOOST_FIXTURE_TEST_CASE( b1_vesting, eosio_system_tester ) try {
                         unstake( b1, b1, small_amount, small_amount ) );
 
 } FC_LOG_AND_RETHROW()
+#endif//ENABLED_B1
 
-
+#ifdef ENABLED_REX
 BOOST_FIXTURE_TEST_CASE( rex_return, eosio_system_tester ) try {
 
    constexpr uint32_t total_intervals = 30 * 144;
@@ -5608,7 +5614,7 @@ BOOST_FIXTURE_TEST_CASE( rex_return, eosio_system_tester ) try {
    }
 
 } FC_LOG_AND_RETHROW()
-
+#endif//ENABLED_REX
 
 BOOST_AUTO_TEST_CASE( setabi_bios ) try {
    fc::temp_directory tempdir;
@@ -5679,7 +5685,7 @@ BOOST_FIXTURE_TEST_CASE( change_limited_account_back_to_unlimited, eosio_system_
    auto error_msg = stake( "alice1111111"_n, "flon"_n, core_sym::from_string("0.0000"), core_sym::from_string("1.0000") );
    auto semicolon_pos = error_msg.find(';');
 
-   BOOST_REQUIRE_EQUAL( error("account eosio has insufficient ram"),
+   BOOST_REQUIRE_EQUAL( error("account flon has insufficient ram"),
                         error_msg.substr(0, semicolon_pos) );
 
    int64_t ram_bytes_needed = 0;
@@ -5758,7 +5764,7 @@ BOOST_FIXTURE_TEST_CASE( buy_pin_sell_ram, eosio_system_tester ) try {
    auto error_msg = stake( "alice1111111"_n, "flon"_n, core_sym::from_string("10.0000"), core_sym::from_string("10.0000") );
    auto semicolon_pos = error_msg.find(';');
 
-   BOOST_REQUIRE_EQUAL( error("account eosio has insufficient ram"),
+   BOOST_REQUIRE_EQUAL( error("account flon has insufficient ram"),
                         error_msg.substr(0, semicolon_pos) );
 
    int64_t ram_bytes_needed = 0;

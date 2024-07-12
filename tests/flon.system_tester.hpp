@@ -341,13 +341,13 @@ public:
 
    int64_t get_net_limit( account_name a ) {
       int64_t ram_bytes = 0, net = 0, cpu = 0;
-      control->get_resource_limits_manager().get_account_limits( a, ram_bytes, net, cpu );
+      control->get_resource_limits_manager().get_account_limits( a, ram_bytes, net, cpu, control->dbm().main_db() );
       return net;
    };
 
    int64_t get_cpu_limit( account_name a ) {
       int64_t ram_bytes = 0, net = 0, cpu = 0;
-      control->get_resource_limits_manager().get_account_limits( a, ram_bytes, net, cpu );
+      control->get_resource_limits_manager().get_account_limits( a, ram_bytes, net, cpu, control->dbm().main_db() );
       return cpu;
    };
 
