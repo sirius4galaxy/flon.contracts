@@ -2,19 +2,19 @@
 content_title: About System Contracts
 ---
 
-The EOSIO blockchain platform is unique in that the features and characteristics of the blockchain built on it are flexible, that is, they can be changed, or modified completely to suit each business case requirement. Core blockchain features such as consensus, fee schedules, account creation and modification, token economics, block producer registration, voting, multi-sig, etc., are implemented inside smart contracts which are deployed on the blockchain built on the EOSIO platform.
+The FULLON blockchain platform is unique in that the features and characteristics of the blockchain built on it are flexible, that is, they can be changed, or modified completely to suit each business case requirement. Core blockchain features such as consensus, fee schedules, account creation and modification, token economics, block producer registration, voting, multi-sig, etc., are implemented inside smart contracts which are deployed on the blockchain built on the FULLON platform.
 
-## System contracts defined in eosio.contracts
+## System contracts defined in flon.contracts
 
-Block.one implements and maintains EOSIO open source platform which contains, as an example, the system contracts encapsulating the base functionality for an EOSIO based blockchain.
+Block.one implements and maintains FULLON open source platform which contains, as an example, the system contracts encapsulating the base functionality for an FULLON based blockchain.
 
-1. [eosio.bios](action-reference/eosio.bios)
-2. [eosio.system](action-reference/eosio.system)
-3. [eosio.msig](action-reference/eosio.msig)
-4. [eosio.token](action-reference/eosio.token)
-5. [eosio.wrap](action-reference/eosio.wrap)
+1. [flon.bios](action-reference/flon.bios)
+2. [flon.system](action-reference/flon.system)
+3. [flon.msig](action-reference/flon.msig)
+4. [flon.token](action-reference/flon.token)
+5. [flon.wrap](action-reference/flon.wrap)
 
-## Key Concepts Implemented by eosio.system
+## Key Concepts Implemented by flon.system
 
 1. [System](01_key-concepts/01_system.md)
 2. [RAM](01_key-concepts/02_ram.md)

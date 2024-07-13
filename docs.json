@@ -1,5 +1,5 @@
 {
-  "name": "eosio.contracts",
+  "name": "flon.contracts",
   "generators": [
     {
       "name": "collate_markdown",
@@ -11,11 +11,11 @@
       "name": "mdjavadoc",
       "options": {
         "source_dirs": [
-          "contracts/eosio.token/include/eosio.token/",
-          "contracts/eosio.wrap/include/eosio.wrap/",
-          "contracts/eosio.bios/include/eosio.bios/",
-          "contracts/eosio.system/include/eosio.system/",
-          "contracts/eosio.msig/include/eosio.msig/"
+          "contracts/flon.token/include/flon.token/",
+          "contracts/flon.wrap/include/flon.wrap/",
+          "contracts/flon.bios/include/flon.bios/",
+          "contracts/flon.system/include/flon.system/",
+          "contracts/flon.msig/include/flon.msig/"
         ],
         "output_dir": "action-reference"
       }

@@ -30,18 +30,18 @@ jobs:
           echo =====
           mkdir built-contracts
           cp \
-            build/contracts/eosio.bios/eosio.bios.abi \
-            build/contracts/eosio.bios/eosio.bios.wasm \
-            build/contracts/eosio.msig/eosio.msig.abi \
-            build/contracts/eosio.msig/eosio.msig.wasm \
-            build/contracts/eosio.system/.powerup/powup.results.abi \
-            build/contracts/eosio.system/.rex/rex.results.abi \
-            build/contracts/eosio.system/eosio.system.abi \
-            build/contracts/eosio.system/eosio.system.wasm \
-            build/contracts/eosio.token/eosio.token.abi \
-            build/contracts/eosio.token/eosio.token.wasm \
-            build/contracts/eosio.wrap/eosio.wrap.abi \
-            build/contracts/eosio.wrap/eosio.wrap.wasm \
+            build/contracts/flon.bios/flon.bios.abi \
+            build/contracts/flon.bios/flon.bios.wasm \
+            build/contracts/flon.msig/flon.msig.abi \
+            build/contracts/flon.msig/flon.msig.wasm \
+            build/contracts/flon.system/.powerup/powup.results.abi \
+            build/contracts/flon.system/.rex/rex.results.abi \
+            build/contracts/flon.system/flon.system.abi \
+            build/contracts/flon.system/flon.system.wasm \
+            build/contracts/flon.token/flon.token.abi \
+            build/contracts/flon.token/flon.token.wasm \
+            build/contracts/flon.wrap/flon.wrap.abi \
+            build/contracts/flon.wrap/flon.wrap.wasm \
             built-contracts
           ls -l built-contracts
       - name: Upload build
