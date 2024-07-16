@@ -41,13 +41,13 @@ namespace eosiosystem {
        * At startup the initial producer may not be one that is registered / elected
        * and therefore there may be no producer object for them.
        */
-      auto prod = _producers.find( producer.value );
-      if ( prod != _producers.end() ) {
-         _gstate.total_unpaid_blocks++;
-         _producers.modify( prod, same_payer, [&](auto& p ) {
-               p.unpaid_blocks++;
-         });
-      }
+      // auto prod = _producers.find( producer.value );
+      // if ( prod != _producers.end() ) {
+      //    _gstate.total_unpaid_blocks++;
+      //    _producers.modify( prod, same_payer, [&](auto& p ) {
+      //          p.unpaid_blocks++;
+      //    });
+      // }
 
       /// only update block producers once every minute, block_timestamp is in half seconds
       if( timestamp.slot - _gstate.last_producer_schedule_update.slot > 120 ) {
@@ -75,7 +75,7 @@ namespace eosiosystem {
 
    void system_contract::claimrewards( const name& owner ) {
       require_auth( owner );
-
+      #if 0
       const auto& prod = _producers.get( owner.value );
       check( prod.active(), "producer does not have an active key" );
 
@@ -194,6 +194,7 @@ namespace eosiosystem {
          token::transfer_action transfer_act{ token_account, { {vpay_account, active_permission}, {owner, active_permission} } };
          transfer_act.send( vpay_account, owner, asset(producer_per_vote_pay, core_symbol()), "producer vote pay" );
       }
+      #endif
    }
 
 } //namespace eosiosystem

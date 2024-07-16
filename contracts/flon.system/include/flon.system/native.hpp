@@ -358,5 +358,7 @@ namespace eosiosystem {
          using setabi_action = eosio::action_wrapper<"setabi"_n, &native::setabi>;
          using xshout_action = eosio::action_wrapper<"xshout"_n, &native::xshout>;
          using xshin_action = eosio::action_wrapper<"xshin"_n, &native::xshin>;
+      protected:
+         virtual const eosio::symbol& core_symbol() const {};
    };
 }

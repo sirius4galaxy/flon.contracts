@@ -52,11 +52,6 @@ namespace eosiosystem {
       return gs4;
    }
 
-   symbol system_contract::core_symbol()const {
-      const static auto sym = get_core_symbol( _rammarket );
-      return sym;
-   }
-
    system_contract::~system_contract() {
       _global.set( _gstate, get_self() );
       _global2.set( _gstate2, get_self() );
@@ -461,11 +456,11 @@ namespace eosiosystem {
       }
 
       user_resources_table  userres( get_self(), new_account_name.value );
-
+      const auto& core_sym = system_contract::get_core_symbol(get_self());
       userres.emplace( new_account_name, [&]( auto& res ) {
         res.owner = new_account_name;
-        res.net_weight = asset( 0, system_contract::get_core_symbol() );
-        res.cpu_weight = asset( 0, system_contract::get_core_symbol() );
+        res.net_weight = asset( 0, core_sym );
+        res.cpu_weight = asset( 0, core_sym );
       });
 
       set_resource_limits( new_account_name, 0, 0, 0 );
