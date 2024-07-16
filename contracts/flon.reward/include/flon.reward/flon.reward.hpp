@@ -127,11 +127,13 @@ namespace flon {
                            const asset &quantity,
                            const string &memo);
 
+         using init_action = eosio::action_wrapper<"init"_n, &flon_reward::init>;
          using regproducer_action = eosio::action_wrapper<"regproducer"_n, &flon_reward::regproducer>;
          using addvote_action = eosio::action_wrapper<"addvote"_n, &flon_reward::addvote>;
          using subvote_action = eosio::action_wrapper<"subvote"_n, &flon_reward::subvote>;
          using voteproducer_action = eosio::action_wrapper<"voteproducer"_n, &flon_reward::voteproducer>;
          using claimrewards_action = eosio::action_wrapper<"claimrewards"_n, &flon_reward::claimrewards>;
+         using claimfor_action = eosio::action_wrapper<"claimfor"_n, &flon_reward::claimfor>;
    public:
          struct [[eosio::table("global")]] global_state {
             asset                total_rewards;

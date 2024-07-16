@@ -1,5 +1,6 @@
 #include <flon.system/flon.system.hpp>
 #include <flon.token/flon.token.hpp>
+#include <flon.reward/flon.reward.hpp>
 
 #include <eosio/crypto.hpp>
 #include <eosio/dispatcher.hpp>
@@ -504,6 +505,9 @@ namespace eosiosystem {
 
       token::open_action open_act{ token_account, { {get_self(), active_permission} } };
       open_act.send( rex_account, core, get_self() );
+
+      flon::flon_reward::init_action init_act{ reward_account, { {get_self(), active_permission} } };
+      open_act.send( core );
    }
 
 } /// flon.system

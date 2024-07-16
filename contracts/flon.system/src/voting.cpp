@@ -9,6 +9,7 @@
 
 #include <flon.system/flon.system.hpp>
 #include <flon.token/flon.token.hpp>
+#include <flon.reward/flon.reward.hpp>
 
 #include <type_traits>
 #include <limits>
@@ -50,10 +51,10 @@ namespace eosiosystem {
          }
       }, producer_authority );
 
-      // if (!flon_reward::is_producer_registered(reward_account, producer)) {
-      //    flon_reward::regproducer_action reg_act{ reward_account, { {producer, active_permission} } };
-      //    reg_act.send( producer );
-      // }
+      if (!flon::flon_reward::is_producer_registered(reward_account, producer)) {
+         flon::flon_reward::regproducer_action reg_act{ reward_account, { {producer, active_permission} } };
+         reg_act.send( producer );
+      }
 
       if ( prod != _producers.end() ) {
          _producers.modify( prod, producer, [&]( producer_info& info ){
@@ -452,8 +453,8 @@ namespace eosiosystem {
          });
       }
 
-      // flon_reward::addvote_action addvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
-      // addvote_act.send( voter, votes );
+      flon::flon_reward::addvote_action addvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
+      addvote_act.send( voter, votes );
    }
 
    void system_contract::subvote( const name& voter, const asset& vote_staked ) {
@@ -488,8 +489,8 @@ namespace eosiosystem {
       //    r.request_time = now;
       // });
 
-      // flon_reward::subvote_action subvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
-      // subvote_act.send( voter, votes );
+      flon::flon_reward::subvote_action subvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
+      subvote_act.send( voter, votes );
 
       static const name act_name = "refundvote"_n;
       uint128_t trx_send_id = uint128_t(act_name.value) << 64 | voter.value;
