@@ -50,8 +50,8 @@ namespace eosiosystem {
          }
       }, producer_authority );
 
-      // if (!amax_reward::is_producer_registered(reward_account, producer)) {
-      //    amax_reward::regproducer_action reg_act{ reward_account, { {producer, active_permission} } };
+      // if (!flon_reward::is_producer_registered(reward_account, producer)) {
+      //    flon_reward::regproducer_action reg_act{ reward_account, { {producer, active_permission} } };
       //    reg_act.send( producer );
       // }
 
@@ -452,7 +452,7 @@ namespace eosiosystem {
          });
       }
 
-      // amax_reward::addvote_action addvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
+      // flon_reward::addvote_action addvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
       // addvote_act.send( voter, votes );
    }
 
@@ -488,7 +488,7 @@ namespace eosiosystem {
       //    r.request_time = now;
       // });
 
-      // amax_reward::subvote_action subvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
+      // flon_reward::subvote_action subvote_act{ reward_account, { {get_self(), active_permission}, {voter, active_permission} } };
       // subvote_act.send( voter, votes );
 
       static const name act_name = "refundvote"_n;

@@ -1200,7 +1200,7 @@ namespace eosiosystem {
 
          /**
           * Refund vote action, this action is called after the subvote-period to claim all pending
-          * staked AMAX of substracted votes belonging to owner.
+          * staked core asset of substracted votes belonging to owner.
           *
           * @param owner - the owner of the tokens claimed.
           */

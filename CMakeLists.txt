@@ -27,7 +27,7 @@ option(SYSTEM_BLOCKCHAIN_PARAMETERS
 
 
 ExternalProject_Add(
-   amax_contracts_project
+   flon_contracts_project
    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contracts
    BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/contracts
    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/install
