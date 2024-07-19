@@ -33,7 +33,8 @@ public:
       produce_blocks( 2 );
 
       create_accounts({ "flon.token"_n, "flon.ram"_n, "flon.ramfee"_n, "flon.stake"_n,
-               "flon.bpay"_n, "flon.vpay"_n, "flon.saving"_n, "flon.names"_n, "flon.rex"_n });
+               "flon.bpay"_n, "flon.vpay"_n, "flon.saving"_n, "flon.names"_n, "flon.rex"_n,
+               "flon.reward"_n, "flon.vote"_n });
 
 
       produce_blocks( 100 );
@@ -45,6 +46,9 @@ public:
          BOOST_REQUIRE_EQUAL(abi_serializer::to_abi(accnt.abi, abi), true);
          token_abi_ser.set_abi(abi, abi_serializer::create_yield_function(abi_serializer_max_time));
       }
+
+      set_code( "flon.reward"_n, contracts::reward_wasm());
+      set_abi( "flon.reward"_n, contracts::reward_abi().data() );
    }
 
    void create_core_token( symbol core_symbol = symbol{CORE_SYM} ) {
@@ -772,6 +776,8 @@ public:
                           ("producer_key", get_public_key( acnt, "active" ) )
                           ("url", "" )
                           ("location", 0 )
+                          ("reward_shared_ratio", 0 )
+
       );
       BOOST_REQUIRE_EQUAL( success(), r);
       return r;
@@ -785,6 +791,18 @@ public:
    }
    action_result vote( const account_name& voter, const std::vector<account_name>& producers, std::string_view proxy ) {
       return vote( voter, producers, account_name(proxy) );
+   }
+
+   action_result addvote( const account_name& voter, const asset& vote_staked ) {
+      return push_action(voter, "addvote"_n, mvo()
+                         ("voter",     voter)
+                         ("vote_staked", vote_staked));
+   }
+
+   action_result subvote( const account_name& voter, const asset& vote_staked ) {
+      return push_action(voter, "subvote"_n, mvo()
+                         ("voter",     voter)
+                         ("vote_staked", vote_staked));
    }
 
    uint32_t last_block_time() const {
@@ -1013,7 +1031,7 @@ public:
       //vote for producers
       {
          transfer( config::system_account_name, "alice1111111"_n, core_sym::from_string("100000000.0000"), config::system_account_name );
-         BOOST_REQUIRE_EQUAL(success(), stake( "alice1111111"_n, core_sym::from_string("30000000.0000"), core_sym::from_string("30000000.0000") ) );
+         BOOST_REQUIRE_EQUAL(success(), addvote( "alice1111111"_n, core_sym::from_string("60000000.0000")) );
          BOOST_REQUIRE_EQUAL(success(), buyram( "alice1111111"_n, "alice1111111"_n, core_sym::from_string("30000000.0000") ) );
          BOOST_REQUIRE_EQUAL(success(), push_action("alice1111111"_n, "voteproducer"_n, mvo()
                                                     ("voter",  "alice1111111")
@@ -1037,15 +1055,20 @@ public:
       {
          signed_transaction trx;
          set_transaction_headers(trx);
-
-         trx.actions.emplace_back( get_action( config::system_account_name, "delegatebw"_n,
+         trx.actions.emplace_back( get_action( "flon.token"_n, "transfer"_n,
                                                vector<permission_level>{{config::system_account_name, config::active_name}},
+                                               mutable_variant_object()
+                                               ("from",     config::system_account_name)
+                                               ("to",       "producer1111"_n )
+                                               ("quantity", core_sym::from_string("150000000.0000") )
+                                               ("memo",     "")
+                                             )
+                                 );
+         trx.actions.emplace_back( get_action( config::system_account_name, "addvote"_n,
+                                               vector<permission_level>{{"producer1111"_n, config::active_name}},
                                                mvo()
-                                               ("from", name{config::system_account_name})
-                                               ("receiver", "producer1111")
-                                               ("stake_net_quantity", core_sym::from_string("150000000.0000") )
-                                               ("stake_cpu_quantity", core_sym::from_string("0.0000") )
-                                               ("transfer", 1 )
+                                               ("voter", "producer1111"_n)
+                                               ("vote_staked", core_sym::from_string("150000000.0000") )
                                              )
                                  );
          trx.actions.emplace_back( get_action( config::system_account_name, "voteproducer"_n,
@@ -1056,13 +1079,11 @@ public:
                                                ("producers", vector<account_name>(1, "producer1111"_n))
                                              )
                                  );
-         trx.actions.emplace_back( get_action( config::system_account_name, "undelegatebw"_n,
+         trx.actions.emplace_back( get_action( config::system_account_name, "subvote"_n,
                                                vector<permission_level>{{"producer1111"_n, config::active_name}},
                                                mvo()
-                                               ("from", "producer1111")
-                                               ("receiver", "producer1111")
-                                               ("unstake_net_quantity", core_sym::from_string("150000000.0000") )
-                                               ("unstake_cpu_quantity", core_sym::from_string("0.0000") )
+                                               ("voter", "producer1111")
+                                               ("vote_staked", core_sym::from_string("150000000.0000") )
                                              )
                                  );
 
@@ -1070,6 +1091,9 @@ public:
          trx.sign( get_private_key( config::system_account_name, "active" ), control->get_chain_id()  );
          trx.sign( get_private_key( "producer1111"_n, "active" ), control->get_chain_id()  );
          push_transaction( trx );
+         produce_block();
+         produce_block(fc::days(3));
+         transfer( "producer1111"_n, "flon"_n, core_sym::from_string("150000000.0000"), "producer1111"_n);
          produce_block();
       }
    }

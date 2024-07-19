@@ -432,22 +432,22 @@ namespace eosiosystem {
       EOSLIB_SERIALIZE( refund_request, (owner)(request_time)(net_amount)(cpu_amount) )
    };
 
-   // struct [[eosio::table, eosio::contract("flon.system")]] vote_refund {
-   //    name            owner;
-   //    time_point_sec  request_time;
-   //    eosio::asset    vote_staked;
+   struct [[eosio::table, eosio::contract("flon.system")]] vote_refund {
+      name            owner;
+      time_point_sec  request_time;
+      eosio::asset    vote_staked;
 
-   //    uint64_t  primary_key()const { return owner.value; }
+      uint64_t  primary_key()const { return owner.value; }
 
-   //    // explicit serialization macro is not necessary, used here only to improve compilation time
-   //    EOSLIB_SERIALIZE( vote_refund, (owner)(request_time)(vote_staked) )
-   // };
+      // explicit serialization macro is not necessary, used here only to improve compilation time
+      EOSLIB_SERIALIZE( vote_refund, (owner)(request_time)(vote_staked) )
+   };
 
 
    typedef eosio::multi_index< "userres"_n, user_resources >      user_resources_table;
    typedef eosio::multi_index< "delband"_n, delegated_bandwidth > del_bandwidth_table;
    typedef eosio::multi_index< "refunds"_n, refund_request >      refunds_table;
-   // typedef eosio::multi_index< "voterefund"_n, vote_refund >      vote_refund_table;
+   typedef eosio::multi_index< "voterefund"_n, vote_refund >      vote_refund_table;
 
    // `rex_pool` structure underlying the rex pool table. A rex pool table entry is defined by:
    // - `version` defaulted to zero,
@@ -787,10 +787,10 @@ namespace eosiosystem {
          system_contract( name s, name code, datastream<const char*> ds );
          ~system_contract();
 
-         static const eosio::symbol& get_core_symbol(const name& self) {
+         static eosio::symbol get_core_symbol(const name& self) {
             global_state_singleton   global(self, self.value);
             check(global.exists(), "global does not exist");
-            const auto& sym = global.get().core_symbol;
+            auto sym = global.get().core_symbol;
             check(sym.raw() != 0, "system contract must first be initialized");
             return sym;
          }
@@ -1204,8 +1204,8 @@ namespace eosiosystem {
           *
           * @param owner - the owner of the tokens claimed.
           */
-         // [[eosio::action]]
-         // void refundvote( const name& owner );
+         [[eosio::action]]
+         void voterefund( const name& owner );
 
          // functions defined in voting.cpp
 
@@ -1347,7 +1347,7 @@ namespace eosiosystem {
           * @pre Voter can only update votes once a day, restricted actions: (addvote, subvote, vote)
           *
           * @post The substracting staked will be transferred to `voter` liquid balance via a
-          *    deferred `refundvote` transaction with a delay of 3 days.
+          *    deferred `voterefund` transaction with a delay of 3 days.
           * @post All producers `voter` account has voted for will have their votes updated immediately.
           * @post Bandwidth and storage for the deferred transaction are billed to `voter`.
           */
@@ -1609,8 +1609,7 @@ namespace eosiosystem {
       private:
          // Implementation details:
 
-         const eosio::symbol& core_symbol() const override{
-
+         const eosio::symbol& core_symbol() const {
             check(_gstate.core_symbol.is_valid(), "system contract must first be initialized");
             return _gstate.core_symbol;
          }

@@ -68,6 +68,7 @@ void flon_reward::init( const symbol& core_symbol ) {
    require_auth(SYSTEM_CONTRACT);
    CHECK(!_gstate.total_rewards.symbol.is_valid(), "reward contract has already been initialized")
    _gstate.total_rewards = asset(0, core_symbol);
+   _global.set(_gstate, get_self());
 }
 
 void flon_reward::regproducer( const name& producer ) {
@@ -287,7 +288,7 @@ void flon_reward::allocate_producer_rewards(voted_producer_map& producers, int64
 }
 
 void flon_reward::check_init() const {
-   CHECK(!_gstate.total_rewards.symbol.is_valid(), "reward contract has not been initialized")
+   CHECK( _gstate.total_rewards.symbol.is_valid(), "reward contract has not been initialized" )
 }
 
 const symbol& flon_reward::core_symbol() const {
