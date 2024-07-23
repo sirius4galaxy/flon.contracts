@@ -478,8 +478,8 @@ namespace eosiosystem {
       CHECK(vote_staked.amount > 0, "vote_staked must be positive")
 
       auto votes = vote_staked.amount;
-      // token::transfer_action transfer_act{ token_account, { {voter, active_permission} } };
-      // transfer_act.send( voter, vote_account, vote_staked, "addvote" );
+      eosio::token::transfer_action transfer_act{ token_account, { {voter, active_permission} } };
+      transfer_act.send( voter, vote_account, vote_staked, "addvote" );
 
       auto now = current_time_point();
       auto voter_itr = _voters.find( voter.value );
@@ -560,9 +560,8 @@ namespace eosiosystem {
       check( itr != vote_refund_tbl.end(), "no vote refund found" );
       check( itr->request_time + seconds(refund_delay_sec) <= current_time_point(), "refund period not mature yet" );
 
-      auto vote_staked = vote_to_core_asset(itr->votes);
-      token::transfer_action transfer_act{ token_account, { {vote_account, active_permission} } };
-      transfer_act.send( vote_account, itr->owner, vote_staked, "voterefund" );
+      eosio::token::transfer_action transfer_act{ token_account, { {vote_account, active_permission} } };
+      transfer_act.send( vote_account, itr->owner, itr->vote_staked, "voterefund" );
       vote_refund_tbl.erase( itr );
    }
 
