@@ -240,7 +240,7 @@ void flon_reward::change_vote(const name& voter, int64_t votes, bool is_adding) 
       }
       allocate_producer_rewards(v.producers, v.votes, votes_delta, voter, v.unclaimed_rewards);
       v.votes        += votes_delta;
-      CHECK(v.votes >= 0, "voter's votes can not be negtive")
+      CHECK(v.votes >= 0, "voter's votes can not be negative")
 
       v.update_at    = now;
    });
@@ -279,7 +279,7 @@ void flon_reward::allocate_producer_rewards(voted_producer_map& producers, int64
          }
 
          p.votes += votes_delta;
-         CHECK(p.votes >= 0, "producer votes can not be negtive")
+         CHECK(p.votes >= 0, "producer votes can not be negative")
          p.update_at = now;
 
          last_rewards_per_vote = p.rewards_per_vote; // update for voted_prod

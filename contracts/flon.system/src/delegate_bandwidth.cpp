@@ -158,15 +158,6 @@ namespace eosiosystem {
       }
    }
 
-   void validate_b1_vesting( int64_t stake ) {
-      const int64_t base_time = 1527811200; /// Friday, June 1, 2018 12:00:00 AM UTC
-      const int64_t current_time = 1638921540; /// Tuesday, December 7, 2021 11:59:00 PM UTC
-      const int64_t max_claimable = 100'000'000'0000ll;
-      const int64_t claimable = int64_t(max_claimable * double(current_time - base_time) / (10*seconds_per_year) );
-
-      check( max_claimable - claimable <= stake, "b1 can only claim their tokens over 10 years" );
-   }
-
    void system_contract::changebw( name from, const name& receiver,
                                    const asset& stake_net_delta, const asset& stake_cpu_delta, bool transfer )
    {
@@ -342,33 +333,36 @@ namespace eosiosystem {
       }
 
       // vote_stake_updater( from );
-      update_voting_power( from, stake_net_delta + stake_cpu_delta );
-   }
-
-   void system_contract::update_voting_power( const name& voter, const asset& total_update )
-   {
-      auto voter_itr = _voters.find( voter.value );
-      if( voter_itr == _voters.end() ) {
-         voter_itr = _voters.emplace( voter, [&]( auto& v ) {
-            v.owner  = voter;
-            v.staked = total_update.amount;
-         });
-      } else {
-         _voters.modify( voter_itr, same_payer, [&]( auto& v ) {
-            v.staked += total_update.amount;
-         });
-      }
-
-      check( 0 <= voter_itr->staked, "stake for voting cannot be negative" );
-
-      if( voter == "b1"_n ) {
-         validate_b1_vesting( voter_itr->staked );
-      }
-
-      if( voter_itr->producers.size() || voter_itr->proxy ) {
-         update_votes( voter, voter_itr->proxy, voter_itr->producers, false );
+      // update_voting_power( from, stake_net_delta + stake_cpu_delta );
+      {
+         if( _voters.find( from.value ) == _voters.end() ) {
+            _voters.emplace( from, [&]( auto& v ) {
+               v.owner  = from;
+            });
+         }
       }
    }
+
+   // void system_contract::update_voting_power( const name& voter, const asset& total_update )
+   // {
+   //    auto voter_itr = _voters.find( voter.value );
+   //    if( voter_itr == _voters.end() ) {
+   //       voter_itr = _voters.emplace( voter, [&]( auto& v ) {
+   //          v.owner  = voter;
+   //          v.staked = total_update.amount;
+   //       });
+   //    } else {
+   //       _voters.modify( voter_itr, same_payer, [&]( auto& v ) {
+   //          v.staked += total_update.amount;
+   //       });
+   //    }
+
+   //    check( 0 <= voter_itr->staked, "stake for voting cannot be negative" );
+
+   //    if( voter_itr->producers.size() || voter_itr->proxy ) {
+   //       update_votes( voter, voter_itr->proxy, voter_itr->producers, false );
+   //    }
+   // }
 
    void system_contract::delegatebw( const name& from, const name& receiver,
                                      const asset& stake_net_quantity,

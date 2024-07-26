@@ -282,6 +282,46 @@ public:
          return base_tester::push_action( std::move(act), (auth ? signer : signer == "bob111111111"_n ? "alice1111111"_n : "bob111111111"_n).to_uint64_t() );
    }
 
+   base_tester::action_result push_actions(vector<action> actions) {
+      signed_transaction trx;
+      set_transaction_headers(trx);
+      trx.actions = std::move(actions);
+      set_transaction_headers(trx);
+      for (const auto& act : trx.actions) {
+         for (const auto& auth : act.authorization ) {
+            trx.sign( get_private_key( auth.actor, auth.permission.to_string() ), control->get_chain_id()  );
+         }
+      }
+      try {
+         push_transaction(trx);
+      } catch (const fc::exception& ex) {
+         edump((ex.to_detail_string()));
+         return error(ex.top_message()); // top_message() is assumed by many tests; otherwise they fail
+         //return error(ex.to_detail_string());
+      }
+      produce_block();
+      BOOST_REQUIRE_EQUAL(true, chain_has_transaction(trx.id()));
+      return success();
+
+   }
+
+   vector<permission_level> get_active_perms(const account_name& name) {
+      return {{name, config::active_name}};
+   }
+
+
+   action get_transfer_action( const name& from, const name& to, const asset& quantity, const string& memo = "" ) {
+      return get_action( "flon.token"_n,
+                         "transfer"_n,
+                         get_active_perms(from),
+                         mutable_variant_object()
+                              ("from",     from)
+                              ("to",       to )
+                              ("quantity", quantity )
+                              ("memo", memo )
+      );
+   }
+
    action_result stake( const account_name& from, const account_name& to, const asset& net, const asset& cpu ) {
       return push_action( name(from), "delegatebw"_n, mvo()
                           ("from",     from)
@@ -799,10 +839,51 @@ public:
                          ("vote_staked", vote_staked));
    }
 
+   action_result addvote( const account_name& voter, const asset& vote_staked1, const asset& vote_staked2 ) {
+      return addvote(voter, vote_staked1 + vote_staked2);
+   }
+
+   action_result addvote( const string& voter, const asset& vote_staked1, const asset& vote_staked2 ) {
+      return addvote(account_name(voter), vote_staked1, vote_staked2);
+   }
+
+   action_result addvote( const account_name& from, const account_name& voter, const asset& vote_staked1, const asset& vote_staked2 ) {
+      auto vote_staked = vote_staked1 + vote_staked2;
+      vector<action> actions;
+      if (from != voter) {
+         actions.emplace_back(get_transfer_action(from, voter, vote_staked ));
+      }
+      actions.emplace_back(get_addvote_action(voter, vote_staked ));
+
+      return push_actions(actions);
+   }
+
+   action_result addvote( const string& from, const string& voter, const asset& vote_staked1, const asset& vote_staked2 ) {
+      return addvote( account_name(from), account_name(voter), vote_staked1, vote_staked2 );
+   }
+
+   action get_addvote_action( const name& voter, const asset& vote_staked ) {
+      return get_action( config::system_account_name,
+                         "addvote"_n,
+                         get_active_perms(voter),
+                         mutable_variant_object()
+                              ("voter",         voter)
+                              ("vote_staked",   vote_staked )
+      );
+   }
+
    action_result subvote( const account_name& voter, const asset& vote_staked ) {
       return push_action(voter, "subvote"_n, mvo()
                          ("voter",     voter)
                          ("vote_staked", vote_staked));
+   }
+
+   action_result subvote( const account_name& voter, const asset& vote_staked1, const asset& vote_staked2 ) {
+      return subvote(voter, vote_staked1 + vote_staked2);
+   }
+
+   action_result subvote( const string& voter, const asset& vote_staked1, const asset& vote_staked2 ) {
+      return subvote(account_name(voter), vote_staked1, vote_staked2);
    }
 
    uint32_t last_block_time() const {
@@ -925,12 +1006,11 @@ public:
       issue_and_transfer( name(to), amount );
    }
 
-   double stake2votes( asset stake ) {
-      auto now = control->pending_block_time().time_since_epoch().count() / 1000000;
-      return stake.get_amount() * pow(2, int64_t((now - (config::block_timestamp_epoch / 1000)) / (86400 * 7))/ double(52) ); // 52 week periods (i.e. ~years)
+   int64_t stake2votes( asset stake ) {
+      return stake.get_amount();
    }
 
-   double stake2votes( const string& s ) {
+   int64_t stake2votes( const string& s ) {
       return stake2votes( core_sym::from_string(s) );
    }
 
@@ -998,7 +1078,7 @@ public:
    vector<name> active_and_vote_producers() {
       //stake more than 15% of total EOS supply to activate chain
       transfer( "flon"_n, "alice1111111"_n, core_sym::from_string("650000000.0000"), config::system_account_name );
-      BOOST_REQUIRE_EQUAL( success(), stake( "alice1111111"_n, "alice1111111"_n, core_sym::from_string("300000000.0000"), core_sym::from_string("300000000.0000") ) );
+      BOOST_REQUIRE_EQUAL( success(), addvote( "alice1111111"_n, "alice1111111"_n, core_sym::from_string("300000000.0000"), core_sym::from_string("300000000.0000") ) );
 
       // create accounts {defproducera, defproducerb, ..., defproducerz} and register as producers
       std::vector<account_name> producer_names;
@@ -1126,14 +1206,14 @@ inline fc::mutable_variant_object voter( std::string_view acct ) {
 }
 
 inline fc::mutable_variant_object voter( account_name acct, const asset& vote_stake ) {
-   return voter( acct )( "staked", vote_stake.get_amount() );
+   return voter( acct )( "votes", vote_stake.get_amount() );
 }
 inline fc::mutable_variant_object voter( std::string_view acct, const asset& vote_stake ) {
    return voter( account_name(acct), vote_stake );
 }
 
 inline fc::mutable_variant_object voter( account_name acct, int64_t vote_stake ) {
-   return voter( acct )( "staked", vote_stake );
+   return voter( acct )( "votes", vote_stake );
 }
 inline fc::mutable_variant_object voter( std::string_view acct, int64_t vote_stake ) {
    return voter( account_name(acct), vote_stake );

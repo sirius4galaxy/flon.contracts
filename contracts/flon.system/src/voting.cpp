@@ -457,9 +457,10 @@ namespace eosiosystem {
          auto pitr = _producers.find( p.value );
 
          CHECK( pitr != _producers.end(), "producer " + p.to_string() + " is not registered" );
-         // if (votes_delta > 0) {
-         //    CHECK( pitr->active() , "producer " + pitr->owner.to_string() + " is not active" );
-         // }
+
+         if (votes_delta > 0) {
+            CHECK( pitr->active() , "producer " + pitr->owner.to_string() + " is not active" );
+         }
          // CHECK(pitr->ext, "producer " + pitr->owner.to_string() + " is not updated by regproducer")
 
          _producers.modify( pitr, same_payer, [&]( auto& p ) {
